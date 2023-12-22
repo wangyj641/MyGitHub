@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import StyledComponentsRegistry from '../lib/AntdRegistry'
-import { Button } from "antd"
+
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -31,7 +31,6 @@ export default function RootLayout({
             <div className='text-[24px] text-center text-middle text-cyan-400'>
               Developed by Yongjun Wang @
             </div>
-
           </div>
         </StyledComponentsRegistry>
       </body>
