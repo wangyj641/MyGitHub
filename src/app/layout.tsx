@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-
+import StyledComponentsRegistry from '../lib/AntdRegistry'
+import { Button } from "antd"
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -15,8 +16,25 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" className='h-full'>
+      <body className='w-full h-full content-center'>
+        <StyledComponentsRegistry>
+          <div className='bg-white sticky z-50 top-0 inset-x-0 h-16'>
+            <div className='text-[24px] text-center text-middle text-cyan-400'>
+              This is mygithub
+            </div>
+          </div>
+          <div className='flex-grow flex-1'>
+            {children}
+          </div>
+          <div className='bg-white sticky z-50 top-0 inset-x-0 h-16'>
+            <div className='text-[24px] text-center text-middle text-cyan-400'>
+              Developed by Yongjun Wang @
+            </div>
+
+          </div>
+        </StyledComponentsRegistry>
+      </body>
     </html>
   )
 }
