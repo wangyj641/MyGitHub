@@ -6,8 +6,8 @@ import './globals.css'
 import StyledComponentsRegistry from '../lib/AntdRegistry'
 import { Input, Layout, Icon, Avatar } from 'antd'
 import { Children, useCallback, useState } from 'react'
-
-import { GithubOutlined, StarFilled, StarTwoTone } from '@ant-design/icons';
+import { GithubOutlined, UserOutlined } from '@ant-design/icons';
+import Container from '../components/Container'
 
 const { Header, Content, Footer } = Layout
 const { Search } = Input;
@@ -44,33 +44,33 @@ export default function RootLayout({
     <html lang="en">
       <body className='w-full'>
         <StyledComponentsRegistry>
-          <Layout className='w-full'>
-            <div className=''>
-              <Header style={{ paddingLeft: 0, paddingRight: 0 }}>
-                <div className='flex px-5 py-1 justify-between content-between'>
-                  <div className='flex w-100'>
-                    <div className='w-12'>
-                      <GithubOutlined style={githubIconStyle} />
-                    </div>
-                    <div className='flex'>
-                      <Search style={{ paddingTop: 15, width: 400 }} placeholder='search github' value={search} onChange={handleSearchChange} onSearch={handleOnSearch} />
-                    </div>
+          <Layout>
+            <Header style={{ paddingLeft: 0, paddingRight: 0 }}>
+              <Container renderer={<div className='flex px-5 py-1 justify-between content-between' />}>
+                <div className='flex w-100'>
+                  <div className='w-20 justify-center'>
+                    <GithubOutlined style={githubIconStyle} />
                   </div>
-                  <div className='flex content-center w-20'>
-                    <Avatar size={40} icon='user' />
+                  <div className='flex'>
+                    <Search style={{ paddingTop: 15, width: 400 }} placeholder='search github' value={search} onChange={handleSearchChange} onSearch={handleOnSearch} />
                   </div>
                 </div>
-              </Header >
-              <Content className='flex-grow flex-1 h-svh'>
+                <div className='flex content-center w-20'>
+                  <Avatar size='large' icon={<UserOutlined />} />
+                </div>
+              </Container>
+            </Header >
+            <Content className='h-svh place-content-center'>
+              <Container>
                 {children}
-              </Content>
-              <Footer>
-                <div className='text-base text-center text-cyan-400'>
-                  Developed by Yongjun Wang @
-                  <a href='mailto: wangyj641@gmail.com'>wangyj641@gmail.com</a>
-                </div>
-              </Footer>
-            </div>
+              </Container>
+            </Content>
+            <Footer>
+              <div className='text-base text-center text-cyan-400'>
+                Developed by Yongjun Wang @
+                <a href='mailto: wangyj641@gmail.com'>wangyj641@gmail.com</a>
+              </div>
+            </Footer>
           </Layout>
         </StyledComponentsRegistry>
       </body>
