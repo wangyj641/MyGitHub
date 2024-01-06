@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { Button } from "@/components/ui/button"
+import { cn } from '@/lib/utils'
+import Header from "../components/Header"
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,23 +17,15 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <div className="flex h-30 w-full items-center justify-between p-2">
-          <div>
-            <Button>Click me</Button>
+    <html lang="en" className='h-full'>
+      <body className={cn('h-full font-sans antialiased', inter.className)}>
+        <main className='flex-col h-full'>
+          <Header />
+          <div className='flex h-20 bg-white'>
+            {children}
           </div>
-          <div>
-            header
-          </div>
-        </div>
-        <div>
-          {children}
-        </div>
-        <div>
-          footer
-        </div>
+        </main>
       </body>
-    </html>
+    </html >
   )
 }
