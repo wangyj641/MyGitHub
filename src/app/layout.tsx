@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import Header from '../components/Header'
+
 import { cn } from '@/lib/utils'
-import Header from "../components/Header"
+
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,15 +19,16 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className='h-full'>
-      <body className={cn('h-full font-sans antialiased', inter.className)}>
-        <main className='flex-col h-full'>
-          <Header />
-          <div className='flex h-20 bg-white'>
-            {children}
-          </div>
-        </main>
+    <html lang="en">
+      <body
+        className={cn(
+          'min-h-screen font-sans antialiased grainy',
+          inter.className
+        )}>
+
+        <Header />
+        {children}
       </body>
-    </html >
+    </html>
   )
 }
