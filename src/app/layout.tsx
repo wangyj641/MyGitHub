@@ -2,9 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import Header from '../components/Header'
-
 import { cn } from '@/lib/utils'
-
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -25,7 +23,6 @@ export default function RootLayout({
           'min-h-screen font-sans antialiased grainy',
           inter.className
         )}>
-
         <Header />
         {children}
       </body>
