@@ -5,10 +5,11 @@ import MaxWidthWrapper from './MaxWidthWrapper'
 
 export default function Footer() {
     return (
-        <div className='h-24 w-full border-t border-gray-200 items-center justify-center'>
+        <div className='flex h-24 w-full border-t border-gray-200'>
             <MaxWidthWrapper>
-                <div className='flex h-24 w-full items-center justify-between text-center'>
-                    Developed by Yongjun Wang@wangyj641@gmail.com
+                <div className='flex h-24 items-center justify-center'>
+                    Developed by Yongjun Wang @
+                    <a href='mailto: wangyj641@gmail.com'>wangyj641@gmail.com</a>
                 </div>
             </MaxWidthWrapper>
         </div>
