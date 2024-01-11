@@ -21,12 +21,12 @@ export default function Header() {
     <div className='flex h-20 w-full items-center justify-between border-b border-gray-200'>
       <div className='relative flex items-center sm:flex left-4'>
         <Github color="red" />
-        <Input type="search" placeholder="Repo"
+        <Input type="search" placeholder="Find a repository..."
           value={search}
           onChange={handleSearchChange}
           className='relative left-2 w-60'
         />
-        <Button type="submit" >Search</Button>
+        <Button type="submit" onClick={handleOnSearch}>Search</Button>
       </div>
       <Avatar className='relative right-40'>
         <AvatarImage src="w1.jpg" />
