@@ -5,11 +5,12 @@ const { parse } = require('url')
 
 async function serve() {
     const dev = process.env.NODE_ENV !== 'production'
-    const server = new Koa()
     const app = next({ dev })
-
     await app.prepare()
     const handle = app.getRequestHandler()
+
+    const server = new Koa()
+
     server.use(async (ctx, next) => {
         ctx.req.session = ctx.session
         const parsedUrl = parse(ctx.req.url, true)
