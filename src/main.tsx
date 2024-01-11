@@ -1,6 +1,5 @@
-const Koa = require('koa');
-const next = require('next');
-
+const Koa = require('koa')
+const next = require('next')
 const { parse } = require('url')
 
 async function serve() {
