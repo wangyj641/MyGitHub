@@ -3,10 +3,8 @@
 import React, { useCallback, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import MaxWidthWrapper from './MaxWidthWrapper'
 import { Github } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-
 
 export default function Header() {
   const [search, setSearch] = useState('')
@@ -26,7 +24,10 @@ export default function Header() {
           onChange={handleSearchChange}
           className='relative left-2 w-60'
         />
-        <Button type="submit" onClick={handleOnSearch}>Search</Button>
+        <Button type="submit"
+          onClick={handleOnSearch}
+          className='relative left-3'>
+          Search</Button>
       </div>
       <Avatar className='relative right-40'>
         <AvatarImage src="w1.jpg" />
