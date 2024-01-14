@@ -1,14 +1,12 @@
 const Koa = require('koa')
 const next = require('next')
-const { parse } = require('url')
 
-async function serve() {
-  const dev = process.env.NODE_ENV !== 'production'
-  const app = next({ dev })
-  await app.prepare()
-  const handle = app.getRequestHandler()
+const dev = process.env.NODE_ENV !== 'production'
+const app = next({ dev })
 
+app.prepare().then(() => {
   const server = new Koa()
+  const handle = app.getRequestHandler()
 
   server.use(async (ctx, next) => {
     await handle(ctx.req, ctx.res)
@@ -16,10 +14,7 @@ async function serve() {
     await next()
   })
 
-  const port = 3000
-  server.listen(port, () => {
-    console.log(`--------------------------- Koa server listening on: ${port}. Press CTRL+C to shut down.`)
+  server.listen(3000, () => {
+    console.log('--------------------------- koa server listening on 3000 now ----------------------------');
   })
-}
-
-serve()
+})
