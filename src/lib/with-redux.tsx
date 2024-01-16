@@ -1,22 +1,22 @@
 import { combineReducers, applyMiddleware } from 'redux'
 import React from "react"
-import { configureStore } from '@reduxjs/toolkit'
+import createSore from '../store/store'
 
 const isServer = typeof window === 'undefined'
 const __NEXT_REDUX_STORE__ = '__NEXT_REDUX_STORE__'
 
 function getOrCreateStore(initialState) {
   if (isServer) {
-    return configureStore(initialState)
+    return createSore(initialState)
   }
 
-  // if (!window[__NEXT_REDUX_STORE__]) {
-  //   window[__NEXT_REDUX_STORE__] = createStore(initialState)
-  // }
-  // return window[__NEXT_REDUX_STORE__]
-};
+  if (!window[__NEXT_REDUX_STORE__]) {
+    window[__NEXT_REDUX_STORE__] = createSore(initialState)
+  }
+  return window[__NEXT_REDUX_STORE__]
+}
 
-export default WithReduxHoc(AppComp) {
+export default (AppComp) => {
   class WithReduxApp extends React.Component {
     constructor(props) {
       super(props)
