@@ -26,9 +26,6 @@ export default (AppComp) => {
     render() {
       const { Component, pageProps, ...rest } = this.props
       console.log(Component, pageProps, rest)
-      if (pageProps) {
-        pageProps.test = "123"
-      }
 
       return (
         <AppComp
@@ -37,17 +34,18 @@ export default (AppComp) => {
           reduxStore={this.reduxStore}
           {...rest}
         />
-      );
+      )
     }
   }
 
   WithReduxApp.getInitialProps = async (ctx) => {
+    const reduxStore = getOrCreateStore()
+    ctx.reduxStore = reduxStore
+
     let appProps = {}
     if (typeof AppComp.getInitialProps === "function") {
       appProps = await AppComp.getInitialProps(ctx)
     }
-
-    const reduxStore = getOrCreateStore()
 
     return {
       ...appProps,
