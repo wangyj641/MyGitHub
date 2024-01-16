@@ -1,7 +1,7 @@
 import '@/styles/globals.css'
 import Layout from '@/components/Layout'
 import App from 'next/app'
-import withReduxHoc from '../lib/with-redux.tsx'
+import WithReduxHoc from '../lib/with-redux.tsx'
 import { Provider } from 'react-redux'
 
 class MyApp extends App {
@@ -18,4 +18,4 @@ class MyApp extends App {
   }
 }
 
-export default withReduxHoc(MyApp)
+export default WithReduxHoc(MyApp)

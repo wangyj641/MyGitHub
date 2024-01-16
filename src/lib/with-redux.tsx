@@ -10,56 +10,50 @@ function getOrCreateStore(initialState) {
     return configureStore(initialState)
   }
 
-  if (!window[__NEXT_REDUX_STORE__]) {
-    window[__NEXT_REDUX_STORE__] = createStore(initialState)
-  }
-  return window[__NEXT_REDUX_STORE__]
-}
+  // if (!window[__NEXT_REDUX_STORE__]) {
+  //   window[__NEXT_REDUX_STORE__] = createStore(initialState)
+  // }
+  // return window[__NEXT_REDUX_STORE__]
+};
 
-export default withReduxHoc(AppComp: React.ComponentType) {
-  const withRedux = (props) => {
-    class WithReduxApp extends React.Component {
-      constructor(props) {
-        super(props)
-        this.reduxStore = getOrCreateStore(props.initialReduxState)
-      }
-
-      render() {
-        const { Component, pageProps, ...rest } = this.props
-        console.log(Component, pageProps, rest)
-        if (pageProps) {
-          pageProps.test = "123"
-        }
-
-        return (
-          <AppComp
-            Component={Component}
-            pageProps={pageProps}
-            reduxStore={this.reduxStore}
-            {...rest}
-          />
-        );
-      }
+export default WithReduxHoc(AppComp) {
+  class WithReduxApp extends React.Component {
+    constructor(props) {
+      super(props)
+      this.reduxStore = getOrCreateStore(props.initialReduxState)
     }
 
-    WithReduxApp.getInitialProps = async (ctx) => {
-      let appProps = {}
-      if (typeof AppComp.getInitialProps === "function") {
-        appProps = await AppComp.getInitialProps(ctx)
+    render() {
+      const { Component, pageProps, ...rest } = this.props
+      console.log(Component, pageProps, rest)
+      if (pageProps) {
+        pageProps.test = "123"
       }
 
-      const reduxStore = getOrCreateStore()
-
-      return {
-        ...appProps,
-        initialReduxState: reduxStore.getState(),
-        pageProps: {
-          ...appProps.pageProps,
-          reduxStore
-        }
-      }
+      return (
+        <AppComp
+          Component={Component}
+          pageProps={pageProps}
+          reduxStore={this.reduxStore}
+          {...rest}
+        />
+      );
     }
   }
 
-  return withRedux
+  WithReduxApp.getInitialProps = async (ctx) => {
+    let appProps = {}
+    if (typeof AppComp.getInitialProps === "function") {
+      appProps = await AppComp.getInitialProps(ctx)
+    }
+
+    const reduxStore = getOrCreateStore()
+
+    return {
+      ...appProps,
+      initialReduxState: reduxStore.getState()
+    }
+  }
+
+  return WithReduxApp
 }
