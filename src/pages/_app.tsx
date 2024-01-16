@@ -1,16 +1,21 @@
 import '@/styles/globals.css'
 import Layout from '@/components/Layout'
 import App from 'next/app'
+import withReduxHoc from '../lib/with-redux.tsx'
+import { Provider } from 'react-redux'
 
 class MyApp extends App {
   render() {
-    const { Component, pageProps } = this.props
+    const { Component, pageProps, reduxStore } = this.props
     return (
       <Layout>
-        <Component {...pageProps} />
+        <Provider store={reduxStore}>
+          <Component {...pageProps} />
+        </Provider>
+
       </Layout>
     )
   }
 }
 
-export default MyApp
+export default withReduxHoc(MyApp)
