@@ -5,8 +5,12 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Github } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { connect } from 'react-redux'
+import getConfig from 'next/config'
 
-export default function Header() {
+const { publicRuntimeConfig } = getConfig()
+
+function Header(user) {
   const [search, setSearch] = useState('')
 
   const handleSearchChange = useCallback((event: any) => {
@@ -29,10 +33,34 @@ export default function Header() {
           className='relative left-3'>
           Search</Button>
       </div>
-      <Avatar className='relative right-40'>
-        <AvatarImage src="w1.jpg" />
-        <AvatarFallback>User</AvatarFallback>
-      </Avatar>
+
+      <div className='flex items-center justify-center'>
+        {
+          user && user.id ?
+            (
+              <a href='/'>
+                <Avatar className='relative right-40'>
+                  <AvatarImage src={user.avatar_url} />
+                  <AvatarFallback>User</AvatarFallback>
+                </Avatar>
+              </a>
+            ) :
+            (
+              <a href={publicRuntimeConfig.OAUTH_URL}>
+                <Avatar className='relative right-40'>
+                  <AvatarImage src="w1.jpg" />
+                  <AvatarFallback>User</AvatarFallback>
+                </Avatar>
+              </a>
+            )
+        }
+      </div>
     </div>
   )
 }
+
+export default connect(function mapState(state) {
+  return {
+    user: state.user
+  }
+})(Header)
