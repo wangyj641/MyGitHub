@@ -59,12 +59,21 @@ function Header(user) {
         {
           userInfo && userInfo.id ?
             (
-              < a href='/'>
-                <Avatar className='relative right-40'>
-                  <AvatarImage src={userInfo.avatar_url} />
-                  <AvatarFallback>User</AvatarFallback>
-                </Avatar>
-              </a>
+              <DropdownMenu>
+                <DropdownMenuTrigger className='relative right-40'>
+                  < a href='/'>
+                    <Avatar>
+                      <AvatarImage src={userInfo.avatar_url} />
+                      <AvatarFallback>User</AvatarFallback>
+                    </Avatar>
+                  </a>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuLabel>{userInfo.login}</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>Logout</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) :
             (
               <TooltipProvider >
