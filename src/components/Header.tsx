@@ -38,6 +38,7 @@ function Header(user) {
 
   console.log('---------------- Header ----------------')
   console.log(user)
+  const userInfo = user.user
 
   return (
     <div className='flex h-20 w-full items-center justify-between border-b border-gray-200'>
@@ -56,11 +57,11 @@ function Header(user) {
 
       <div className='flex items-center justify-center'>
         {
-          user && user.id ?
+          userInfo && userInfo.id ?
             (
               < a href='/'>
                 <Avatar className='relative right-40'>
-                  <AvatarImage src={user.avatar_url} />
+                  <AvatarImage src={userInfo.avatar_url} />
                   <AvatarFallback>User</AvatarFallback>
                 </Avatar>
               </a>
