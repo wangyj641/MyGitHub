@@ -1,17 +1,20 @@
 import { combineReducers, applyMiddleware } from 'redux'
 import React from "react"
-import createSore from '../store/store'
+import initializeStore from '../store/store'
 
 const isServer = typeof window === 'undefined'
 const __NEXT_REDUX_STORE__ = '__NEXT_REDUX_STORE__'
 
 function getOrCreateStore(initialState) {
+  if (!initialState)
+    console.log('----------------- initialState is null -----------------')
   if (isServer) {
-    return createSore(initialState)
+    console.log('-------------- isServer initializeStore -------------')
+    return initializeStore(initialState)
   }
 
   if (!window[__NEXT_REDUX_STORE__]) {
-    window[__NEXT_REDUX_STORE__] = createSore(initialState)
+    window[__NEXT_REDUX_STORE__] = initializeStore(initialState)
   }
   return window[__NEXT_REDUX_STORE__]
 }
@@ -25,14 +28,14 @@ export default (AppComp) => {
 
     render() {
       const { Component, pageProps, ...rest } = this.props
-      console.log(Component, pageProps, rest)
+      //console.log(Component, pageProps, rest)
 
       return (
         <AppComp
           Component={Component}
           pageProps={pageProps}
-          reduxStore={this.reduxStore}
           {...rest}
+          reduxStore={this.reduxStore}
         />
       )
     }
@@ -51,6 +54,7 @@ export default (AppComp) => {
           user: session.userInfo
         })
       } else {
+        console.log('-------------------- fail to get session -------------------')
         reduxStore = getOrCreateStore()
       }
     }

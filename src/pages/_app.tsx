@@ -17,7 +17,7 @@ class MyApp extends App {
       pageProps = await Component.getInitialProps(ctx)
     }
 
-    console.log('-----------#######---------------------')
+    console.log('---------------- App getInitialProps ----------------')
     console.log(pageProps)
 
     return { pageProps }
@@ -25,6 +25,8 @@ class MyApp extends App {
 
   render() {
     const { Component, pageProps, reduxStore } = this.props
+    console.log('---------------- App render ----------------')
+    console.log(reduxStore)
     return (
       <Provider store={reduxStore}>
         <Layout>

@@ -1,6 +1,4 @@
 import { combineReducers, applyMiddleware } from 'redux'
-import ReduxThunk from 'redux-thunk'
-import { composeWithDevTools } from 'redux-devtools-extension'
 import { configureStore } from '@reduxjs/toolkit'
 
 const userInitialState = {}
@@ -16,20 +14,36 @@ function userReducer(state = userInitialState, action) {
   }
 }
 
-const allReducers = combineReducers({
-  userReducer
-})
+const reducers = {
+  user: userReducer,
+}
+
+const preloadedState = {
+  user: [
+    {
+      text: 'Eat food',
+      completed: true,
+    },
+    {
+      text: 'Exercise',
+      completed: false,
+    },
+  ],
+}
 
 export default function initializeStore(state) {
+  console.log('-------------- store initializeStore -------------')
+  console.log(state)
+
   const store = configureStore({
-    reducer: allReducers,
+    reducer: reducers,
     preloadedState: Object.assign(
       {},
       {
-        user: userInitialState
+        user: userInitialState,
       },
       state
-    ),
+    )
   })
 
   return store

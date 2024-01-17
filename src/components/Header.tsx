@@ -58,7 +58,7 @@ function Header(user) {
         {
           user && user.id ?
             (
-              <a href='/'>
+              < a href='/'>
                 <Avatar className='relative right-40'>
                   <AvatarImage src={user.avatar_url} />
                   <AvatarFallback>User</AvatarFallback>
@@ -81,7 +81,7 @@ function Header(user) {
             )
         }
       </div>
-    </div>
+    </div >
   )
 }
 
