@@ -7,6 +7,7 @@ import { Github, User } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { connect } from 'react-redux'
 import getConfig from 'next/config'
+import { logout } from '../store/store'
 
 import {
   Tooltip,
@@ -26,7 +27,8 @@ import {
 
 const { publicRuntimeConfig } = getConfig()
 
-function Header(user) {
+// NOTICE: {} is needed to be an props object
+function Header({ user, logout }) {
   const [search, setSearch] = useState('')
 
   const handleSearchChange = useCallback((event: any) => {
@@ -36,12 +38,12 @@ function Header(user) {
   const handleOnSearch = useCallback(() => { }, [])
 
   const handleLogout = useCallback(() => {
-    console.log('----------------- logout --------------------')
+    logout()
   }, [])
 
   console.log('---------------- Header ----------------')
   console.log(user)
-  const userInfo = user.user
+  //const userInfo = user.user
 
   return (
     <div className='flex h-20 w-full items-center justify-between border-b border-gray-200'>
@@ -60,22 +62,22 @@ function Header(user) {
 
       <div className='flex items-center justify-center'>
         {
-          userInfo && userInfo.id ?
+          user && user.id ?
             (
               <DropdownMenu>
-                <DropdownMenuTrigger className='relative right-40'>
+                <DropdownMenuTrigger className='relative right-40 overflow-visible'>
                   < a href='/'>
                     <Avatar>
-                      <AvatarImage src={userInfo.avatar_url} />
+                      <AvatarImage src={user.avatar_url} />
                       <AvatarFallback>User</AvatarFallback>
                     </Avatar>
                   </a>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuLabel>{userInfo.login}</DropdownMenuLabel>
+                  <DropdownMenuLabel>{user.login}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    <a href='javascript:void(0)' onClick={handleLogout}>
+                  <DropdownMenuItem onClick={handleLogout}>
+                    <a href='javascript:void(0)'>
                       Logout
                     </a>
                   </DropdownMenuItem>
@@ -102,8 +104,15 @@ function Header(user) {
   )
 }
 
-export default connect(function mapState(state) {
-  return {
-    user: state.user
-  }
-})(Header)
+export default connect(
+  function mapState(state) {
+    return {
+      user: state.user
+    }
+  },
+  function mapReducer(dispatch) {
+    return {
+      logout: () => dispatch(logout())
+    }
+  },
+)(Header)

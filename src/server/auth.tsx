@@ -60,4 +60,14 @@ module.exports = (server) => {
             await next()
         }
     })
+
+    server.use(async (ctx, next) => {
+        if (ctx.path === '/logout' && ctx.method === 'POST') {
+            console.log('------ auth logout ------')
+            ctx.session = null
+            ctx.body = 'logout success'
+        } else {
+            await next()
+        }
+    })
 }

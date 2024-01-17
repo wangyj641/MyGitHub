@@ -1,5 +1,6 @@
 import { combineReducers, applyMiddleware } from 'redux'
 import { configureStore } from '@reduxjs/toolkit'
+import axios from 'axios'
 
 const userInitialState = {}
 const LOGOUT = 'LOGOUT'
@@ -7,6 +8,7 @@ const LOGOUT = 'LOGOUT'
 function userReducer(state = userInitialState, action) {
   switch (action.type) {
     case LOGOUT: {
+      // remove session, so set state as null
       return {}
     }
     default:
@@ -16,6 +18,26 @@ function userReducer(state = userInitialState, action) {
 
 const reducers = {
   user: userReducer,
+}
+
+// call server api to perform logout
+// dispatch action to store to remove sessions
+export function logout() {
+  console.log('----------------- store logout ------------------------------')
+  return dispatch => {
+    axios.post('/logout')
+      .then(res => {
+        if (res.status === 200) {
+          dispatch({
+            type: LOGOUT
+          })
+        } else {
+          console.log('logout failed', res)
+        }
+      }).catch(err => {
+        console.log('logout failed', err)
+      })
+  }
 }
 
 const preloadedState = {
