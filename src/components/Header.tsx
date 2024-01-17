@@ -24,7 +24,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-
 const { publicRuntimeConfig } = getConfig()
 
 function Header(user) {
@@ -35,6 +34,10 @@ function Header(user) {
   }, [])
 
   const handleOnSearch = useCallback(() => { }, [])
+
+  const handleLogout = useCallback(() => {
+    console.log('----------------- logout --------------------')
+  }, [])
 
   console.log('---------------- Header ----------------')
   console.log(user)
@@ -71,7 +74,11 @@ function Header(user) {
                 <DropdownMenuContent>
                   <DropdownMenuLabel>{userInfo.login}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>Logout</DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <a href='javascript:void(0)' onClick={handleLogout}>
+                      Logout
+                    </a>
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) :
