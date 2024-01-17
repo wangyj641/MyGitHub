@@ -34,20 +34,18 @@ module.exports = (server) => {
                 if ((res.status === 200) && (res.data && !res.data.error)) {
                     console.log('------ get token success ------')
                     ctx.session.githubAuth = res.data
-                    const { access_token, toke_type } = res.data
+                    const { access_token, token_type } = res.data
 
-                    // To be fixed
-                    // CRASH here: AxiosError: Request failed with status code 401
-                    // const userInfoResp = await axios({
-                    //     method: 'GET',
-                    //     url: 'https://api.github.com/user',
-                    //     headers: {
-                    //         'Authorization': `${toke_type} ${access_token}`,
-                    //     },
-                    // })
+                    const userInfoResp = await axios({
+                        method: 'GET',
+                        url: 'https://api.github.com/user',
+                        headers: {
+                            'Authorization': `${token_type} ${access_token}`,
+                        },
+                    })
 
-                    // console.log(userInfoResp.status, userInfoResp.data)
-                    // ctx.session.userInfo = userInfoResp.data
+                    console.log(userInfoResp.status, userInfoResp.data)
+                    ctx.session.userInfo = userInfoResp.data
                     ctx.redirect('/')
                 } else {
                     const errorMsg = res.data && res.data.error

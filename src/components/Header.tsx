@@ -3,10 +3,27 @@
 import React, { useCallback, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Github } from 'lucide-react';
+import { Github, User } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { connect } from 'react-redux'
 import getConfig from 'next/config'
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -18,6 +35,9 @@ function Header(user) {
   }, [])
 
   const handleOnSearch = useCallback(() => { }, [])
+
+  console.log('---------------- Header ----------------')
+  console.log(user)
 
   return (
     <div className='flex h-20 w-full items-center justify-between border-b border-gray-200'>
@@ -46,12 +66,18 @@ function Header(user) {
               </a>
             ) :
             (
-              <a href={publicRuntimeConfig.OAUTH_URL}>
-                <Avatar className='relative right-40'>
-                  <AvatarImage src="w1.jpg" />
-                  <AvatarFallback>User</AvatarFallback>
-                </Avatar>
-              </a>
+              <TooltipProvider >
+                <Tooltip >
+                  <TooltipTrigger>
+                    <a href={publicRuntimeConfig.OAUTH_URL}>
+                      <User className='relative right-40' />
+                    </a>
+                  </TooltipTrigger>
+                  <TooltipContent className='relative right-20'>
+                    <p>Please login</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             )
         }
       </div>

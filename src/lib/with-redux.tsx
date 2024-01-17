@@ -46,6 +46,7 @@ export default (AppComp) => {
       const session = req.session
 
       if (session && session.userInfo) {
+        console.log(session.userInfo)
         reduxStore = getOrCreateStore({
           user: session.userInfo
         })
