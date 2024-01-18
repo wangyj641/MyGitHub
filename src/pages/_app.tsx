@@ -3,6 +3,7 @@ import Layout from '@/components/Layout'
 import App from 'next/app'
 import WithReduxHoc from '../lib/with-redux.tsx'
 import { Provider } from 'react-redux'
+import PageLoading from '@/components/PageLoading'
 
 class MyApp extends App {
   state = {
@@ -23,6 +24,7 @@ class MyApp extends App {
     const { Component, pageProps, reduxStore } = this.props
     return (
       <Provider store={reduxStore}>
+        <PageLoading />
         <Layout>
           <Component {...pageProps} />
         </Layout >
