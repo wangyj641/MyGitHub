@@ -55,7 +55,7 @@ const preloadedState = {
 
 export default function initializeStore(state) {
   console.log('-------------- store initializeStore -------------')
-  console.log(state)
+  //console.log(state)
 
   const store = configureStore({
     reducer: reducers,

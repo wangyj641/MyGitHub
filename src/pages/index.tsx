@@ -1,7 +1,7 @@
-export default function Index() {
+export default function index() {
   return (
     <div className="flex flex-col w-full h-full justify-between items-center p-1">
-      <span>Index</span>
+      <span>index</span>
     </div>
   )
 }

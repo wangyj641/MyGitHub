@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { connect } from 'react-redux'
 import getConfig from 'next/config'
 import { logout } from '../store/store'
+import { withRouter } from 'next/router'
 
 import {
   Tooltip,
@@ -28,7 +29,11 @@ import {
 const { publicRuntimeConfig } = getConfig()
 
 // NOTICE: {} is needed to be an props object
-function Header({ user, logout }) {
+function Header({ router, user, logout }) {
+  //console.log('---------------- Header ----------------')
+  //console.log(router)
+  //console.log(router.route)
+
   const [search, setSearch] = useState('')
 
   const handleSearchChange = useCallback((event: any) => {
@@ -39,11 +44,7 @@ function Header({ user, logout }) {
 
   const handleLogout = useCallback(() => {
     logout()
-  }, [])
-
-  console.log('---------------- Header ----------------')
-  console.log(user)
-  //const userInfo = user.user
+  }, [logout])
 
   return (
     <div className='flex h-20 w-full items-center justify-between border-b border-gray-200'>
@@ -88,7 +89,7 @@ function Header({ user, logout }) {
               <TooltipProvider >
                 <Tooltip >
                   <TooltipTrigger>
-                    <a href={publicRuntimeConfig.OAUTH_URL}>
+                    <a href={`/prepare-auth?url=${router.asPath}`}>
                       <User className='relative right-40' />
                     </a>
                   </TooltipTrigger>
@@ -115,4 +116,4 @@ export default connect(
       logout: () => dispatch(logout())
     }
   },
-)(Header)
+)(withRouter(Header))

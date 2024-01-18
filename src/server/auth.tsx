@@ -46,7 +46,8 @@ module.exports = (server) => {
 
                     console.log(userInfoResp.status, userInfoResp.data)
                     ctx.session.userInfo = userInfoResp.data
-                    ctx.redirect('/')
+                    ctx.redirect((ctx.session && ctx.session.urlBeforeOAuth) || '/')
+                    ctx.session.urlBeforeOAuth = null
                 } else {
                     const errorMsg = res.data && res.data.error
                     ctx.body = {
@@ -66,6 +67,17 @@ module.exports = (server) => {
             console.log('------ auth logout ------')
             ctx.session = null
             ctx.body = 'logout success'
+        } else {
+            await next()
+        }
+    })
+
+    server.use(async (ctx, next) => {
+        if (ctx.path === '/prepare-auth' && ctx.method === 'GET') {
+            console.log('------ auth prepare-auth ------')
+            const { url } = ctx.query
+            ctx.session.urlBeforeOAuth = url
+            ctx.redirect(config.OAUTH_URL)
         } else {
             await next()
         }

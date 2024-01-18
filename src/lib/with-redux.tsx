@@ -6,10 +6,10 @@ const isServer = typeof window === 'undefined'
 const __NEXT_REDUX_STORE__ = '__NEXT_REDUX_STORE__'
 
 function getOrCreateStore(initialState) {
-  if (!initialState)
-    console.log('----------------- initialState is null -----------------')
+  // if (!initialState)
+  //   console.log('----------------- initialState is null -----------------')
   if (isServer) {
-    console.log('-------------- isServer initializeStore -------------')
+    console.log('-------------- isServer -------------')
     return initializeStore(initialState)
   }
 
