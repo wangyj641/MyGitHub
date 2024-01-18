@@ -6,6 +6,7 @@ import { Provider } from 'react-redux'
 import PageLoading from '@/components/PageLoading'
 import Router from 'next/router.js'
 import Link from "next/link"
+import axios from 'axios'
 
 class MyApp extends App {
   state = {
@@ -32,6 +33,11 @@ class MyApp extends App {
     Router.events.on('routeChangeStart', this.startLoading)
     Router.events.on('routeChangeComplete', this.stopLoading)
     Router.events.on('routeChangeError', this.stopLoading)
+
+    // test code to get data from server API
+    axios.get('/github/search/repositories?q=react').then(res => {
+      console.log(res)
+    })
   }
 
   componentWillUnmount() {

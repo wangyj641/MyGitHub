@@ -6,6 +6,7 @@ const Redis = require('ioredis')
 
 const RedisSessionStore = require('./server/session-store.tsx')
 const auth = require('./server/auth.tsx')
+const api = require('./server/api.tsx')
 
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
@@ -28,6 +29,7 @@ app.prepare().then(() => {
   server.use(session(SESSION_CONFIG, server))
 
   auth(server)
+  api(server)
 
   router.get('/api/user/info', async (ctx) => {
     const user = ctx.session.userInfo
@@ -43,27 +45,6 @@ app.prepare().then(() => {
       }
       ctx.set('Content-Type', 'application/json')
     }
-  })
-
-  router.get('/set/user', async (ctx) => {
-    ctx.session.user = {
-      name: 'wang',
-      age: 23,
-    }
-    ctx.body = 'set session success'
-  })
-
-  router.get('/get/user', async (ctx) => {
-    ctx.session.user = {
-      name: 'wang',
-      age: 23,
-    }
-    ctx.body = 'set session success'
-  })
-
-  router.get('/delete/user', async (ctx) => {
-    ctx.session = null
-    ctx.body = 'delete session success'
   })
 
   server.use(router.routes())
