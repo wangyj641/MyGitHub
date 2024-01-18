@@ -26,8 +26,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-const { publicRuntimeConfig } = getConfig()
-
 // NOTICE: {} is needed to be an props object
 function Header({ router, user, logout }) {
   //console.log('---------------- Header ----------------')

@@ -1,4 +1,3 @@
-import { combineReducers, applyMiddleware } from 'redux'
 import React from "react"
 import initializeStore from '../store/store'
 
