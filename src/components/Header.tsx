@@ -6,9 +6,9 @@ import { Input } from "@/components/ui/input"
 import { Github, User } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { connect } from 'react-redux'
-import getConfig from 'next/config'
 import { logout } from '../store/store'
 import { withRouter } from 'next/router'
+import Link from 'next/link'
 
 import {
   Tooltip,
@@ -35,19 +35,26 @@ function Header({ router, user, logout }) {
   const [search, setSearch] = useState('')
 
   const handleSearchChange = useCallback((event: any) => {
+    console.log('---------------- handleSearchChange ----------------')
     setSearch(event.target.value)
-  }, [])
+  }, [setSearch])
 
-  const handleOnSearch = useCallback(() => { }, [])
+  const handleOnSearch = useCallback(() => {
+    console.log('---------------- handleOnSearch ----------------')
+    console.log(search)
+    router.push(`/search?q=${search}`)
+  }, [search])
 
   const handleLogout = useCallback(() => {
     logout()
   }, [logout])
 
   return (
-    <div className='flex h-20 w-full items-center justify-between border-b border-gray-200'>
+    <div className='flex h-20 w-full items-center justify-between border-b border-gray-200 bg-black'>
       <div className='relative flex items-center sm:flex left-4'>
-        <Github color="red" />
+        <Link href={'/'} passHref>
+          <Github color="red" />
+        </Link>
         <Input type="search" placeholder="Find a repository..."
           value={search}
           onChange={handleSearchChange}

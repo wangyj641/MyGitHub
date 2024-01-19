@@ -6,14 +6,14 @@ export default function index() {
   )
 }
 
-index.getInitialProps = async () => {
-  const promise = new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        name: '------test getInitialProps------'
-      })
-    }, 5000)
-  })
+// index.getInitialProps = async () => {
+//   const promise = new Promise((resolve) => {
+//     setTimeout(() => {
+//       resolve({
+//         name: '------test getInitialProps------'
+//       })
+//     }, 5000)
+//   })
 
-  return await promise
-}
+//   return await promise
+// }

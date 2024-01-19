@@ -31,21 +31,21 @@ app.prepare().then(() => {
   auth(server)
   api(server)
 
-  router.get('/api/user/info', async (ctx) => {
-    const user = ctx.session.userInfo
-    if (!user) {
-      ctx.body = {
-        code: 401,
-        data: 'user is not login'
-      }
-    } else {
-      ctx.body = {
-        code: 200,
-        data: user
-      }
-      ctx.set('Content-Type', 'application/json')
-    }
-  })
+  // router.get('/api/user/info', async (ctx) => {
+  //   const user = ctx.session.userInfo
+  //   if (!user) {
+  //     ctx.body = {
+  //       code: 401,
+  //       data: 'user is not login'
+  //     }
+  //   } else {
+  //     ctx.body = {
+  //       code: 200,
+  //       data: user
+  //     }
+  //     ctx.set('Content-Type', 'application/json')
+  //   }
+  // })
 
   server.use(router.routes())
 
