@@ -23,7 +23,7 @@ async function request({ method = 'GET', url, data = {} }, req, res) {
 
   if (isServer) {
     const headers = {}
-    const githubAuth = req.session.githubAuth
+    const githubAuth = req.session.githubAuth || {}
     if (githubAuth.access_token) {
       headers['Authorization'] = `${githubAuth.token_type} ${githubAuth.access_token}`
     }

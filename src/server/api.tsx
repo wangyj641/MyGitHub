@@ -10,19 +10,19 @@ module.exports = (server) => {
       console.log('-------------------- server api------------------------------')
       console.log(path)
 
-      const githubAuth = ctx.session.githubAuth
+      const githubAuth = ctx.session.githubAuth || {}
+
       if (githubAuth) {
         const githubPath = `${ctx.url.replace('/github/', '/')}`
         console.log(githubPath)
 
-        const token = githubAuth.access_token
         const headers = {}
+        const token = githubAuth.access_token
         if (token) {
           headers['Authorization'] = `${githubAuth.token_type} ${token}`
         }
 
         const method = ctx.method
-
         const result = await requestGithub(method, githubPath, {}, headers)
         ctx.status = result.status
         ctx.body = result.data

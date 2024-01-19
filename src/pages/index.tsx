@@ -11,18 +11,14 @@ export default function index() {
 }
 
 index.getInitialProps = async ({ ctx }) => {
-  //test code to get data from server API
-  // const result = await api.request({ url: '/search/repositories?q=react' }, ctx.req, ctx.res)
-  // return {
-  //   data: result.data
-  // }
-
-  const userRepos = await api.request(
+  const result = await api.request(
     {
-      url: '/user/repos',
+      url: '/search/repositories?q=react'
     },
     ctx.req,
-    ctx.res,
-  );
+    ctx.res)
 
+  return {
+    data: result.data
+  }
 }

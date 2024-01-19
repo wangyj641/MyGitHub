@@ -95,7 +95,7 @@ function Header({ router, user, logout }) {
                 <Tooltip >
                   <TooltipTrigger>
                     <a href={`/prepare-auth?url=${router.asPath}`}>
-                      <User className='relative right-40' />
+                      <User className='relative right-40' color="red" />
                     </a>
                   </TooltipTrigger>
                   <TooltipContent className='relative right-20'>
