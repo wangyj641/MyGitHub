@@ -1,3 +1,7 @@
+import axios from "axios"
+
+const api = require("../lib/api")
+
 export default function index() {
   return (
     <div className="flex flex-col w-full h-full justify-between items-center p-1">
@@ -6,14 +10,19 @@ export default function index() {
   )
 }
 
-// index.getInitialProps = async () => {
-//   const promise = new Promise((resolve) => {
-//     setTimeout(() => {
-//       resolve({
-//         name: '------test getInitialProps------'
-//       })
-//     }, 5000)
-//   })
+index.getInitialProps = async ({ ctx }) => {
+  //test code to get data from server API
+  // const result = await api.request({ url: '/search/repositories?q=react' }, ctx.req, ctx.res)
+  // return {
+  //   data: result.data
+  // }
 
-//   return await promise
-// }
+  const userRepos = await api.request(
+    {
+      url: '/user/repos',
+    },
+    ctx.req,
+    ctx.res,
+  );
+
+}

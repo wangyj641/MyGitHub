@@ -33,11 +33,6 @@ class MyApp extends App {
     Router.events.on('routeChangeStart', this.startLoading)
     Router.events.on('routeChangeComplete', this.stopLoading)
     Router.events.on('routeChangeError', this.stopLoading)
-
-    // test code to get data from server API
-    axios.get('/github/search/repositories?q=react').then(res => {
-      console.log(res)
-    })
   }
 
   componentWillUnmount() {
