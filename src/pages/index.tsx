@@ -2,10 +2,11 @@ import { useEffect } from "react"
 
 const api = require("../lib/api")
 
-export default function index() {
-  useEffect(() => {
-    //axios.post('/github/test', { 'key', 'test123' })
-  })
+export default function index({ userRepos, userStarredRepos, isLogin }) {
+  console.log('---------------- index ----------------')
+  //console.log(userRepos)
+  console.log(userStarredRepos)
+  console.log(isLogin)
 
   return (
     <div className="flex flex-col w-full h-full justify-between items-center p-1">
@@ -14,15 +15,34 @@ export default function index() {
   )
 }
 
-index.getInitialProps = async ({ ctx }) => {
-  const result = await api.request(
+index.getInitialProps = async ({ ctx, reduxStore }) => {
+  console.log('---------------- index getInitialProps ----------------')
+  console.log(reduxStore)
+  const user = reduxStore.getState().user
+  if (!user || !user.id) {
+    return {
+      isLogin: false
+    }
+  }
+
+  const userRepos = await api.request(
     {
-      url: '/search/repositories?q=react'
+      url: '/user/repos'
     },
     ctx.req,
     ctx.res)
 
+  const userStarredRepos = await api.request(
+    {
+      url: '/user/starred'
+    },
+    ctx.req,
+    ctx.res)
+
+
   return {
-    data: result.data
+    isLogin: true,
+    userRepos: userRepos.data,
+    userStarredRepos: userStarredRepos.data
   }
 }
