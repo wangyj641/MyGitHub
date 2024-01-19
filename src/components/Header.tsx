@@ -29,10 +29,9 @@ import {
 // NOTICE: {} is needed to be an props object
 function Header({ router, user, logout }) {
   //console.log('---------------- Header ----------------')
-  //console.log(router)
-  //console.log(router.route)
+  const urlQuery = router.query.q
 
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState(urlQuery || '')
 
   const handleSearchChange = useCallback((event: any) => {
     console.log('---------------- handleSearchChange ----------------')
@@ -55,7 +54,8 @@ function Header({ router, user, logout }) {
         <Link href={'/'} passHref>
           <Github color="red" />
         </Link>
-        <Input type="search" placeholder="Find a repository..."
+        <Input type="search"
+          placeholder="Find a repository..."
           value={search}
           onChange={handleSearchChange}
           className='relative left-2 w-60'
