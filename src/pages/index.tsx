@@ -1,18 +1,36 @@
 import { useEffect } from "react"
+import { Button } from "@/components/ui/button"
+import { connect } from "react-redux"
+import config from '../../global.config.js'
 
 const api = require("../lib/api")
 
-export default function index({ userRepos, userStarredRepos, isLogin }) {
+function index({ userRepos, userStarredRepos, user }) {
   console.log('---------------- index ----------------')
   //console.log(userRepos)
-  console.log(userStarredRepos)
-  console.log(isLogin)
+  //console.log(userStarredRepos)
+  //console.log(user)
 
-  return (
-    <div className="flex flex-col w-full h-full justify-between items-center p-1">
-      <span>index</span>
-    </div>
-  )
+  if (!user || !user.id) {
+    const loginUrl = config.OAUTH_URL
+    console.log(loginUrl)
+
+    return (
+      <div className="flex flex-col w-full h-[550px] justify-center items-center p-1">
+        <p>Not login</p>
+        <a href={loginUrl}>
+          <Button>Login</Button>
+        </a>
+      </div >
+    )
+  }
+  else {
+    return (
+      <div className="flex flex-col w-full h-full justify-between items-center p-1">
+        <span>index</span>
+      </div>
+    )
+  }
 }
 
 index.getInitialProps = async ({ ctx, reduxStore }) => {
@@ -46,3 +64,9 @@ index.getInitialProps = async ({ ctx, reduxStore }) => {
     userStarredRepos: userStarredRepos.data
   }
 }
+
+export default connect(function mapState(state) {
+  return {
+    user: state.user
+  }
+})(index)
