@@ -3,6 +3,7 @@ const next = require('next')
 const Router = require('koa-router')
 const session = require('koa-session')
 const Redis = require('ioredis')
+const { koaBody } = require('koa-body')
 
 const RedisSessionStore = require('./server/session-store.tsx')
 const auth = require('./server/auth.tsx')
@@ -12,14 +13,13 @@ const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
 const redis = new Redis()
 
-let index = 0
-
 app.prepare().then(() => {
   const server = new Koa()
   const router = new Router()
   const handle = app.getRequestHandler()
 
   server.keys = ['wang develop github app']
+  server.use(koaBody())
 
   const SESSION_CONFIG = {
     key: 'jid',
@@ -30,22 +30,6 @@ app.prepare().then(() => {
 
   auth(server)
   api(server)
-
-  // router.get('/api/user/info', async (ctx) => {
-  //   const user = ctx.session.userInfo
-  //   if (!user) {
-  //     ctx.body = {
-  //       code: 401,
-  //       data: 'user is not login'
-  //     }
-  //   } else {
-  //     ctx.body = {
-  //       code: 200,
-  //       data: user
-  //     }
-  //     ctx.set('Content-Type', 'application/json')
-  //   }
-  // })
 
   server.use(router.routes())
 
