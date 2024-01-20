@@ -29,9 +29,9 @@ function index({ userRepos, userStarredRepos, user }) {
   else {
     return (
       <div className="flex flex-start py-2 px-2">
-        <div className="flex flex-col width-[100px] mr-[40px]">
+        <div className="flex flex-col width-[200px] mr-[40px] shrink-0">
           <img src={user.avatar_url} alt="avatar" className="w-full rounded" />
-          <span className="text-lg, mt-[20px]">{user.login}</span>
+          <span className="text-lg mt-[20px] font-extrabold">{user.login}</span>
           <span className="text-base">{user.name}</span>
           <span className="my-[20px]">{user.bio}</span>
           <div className='flex flex-row'>
@@ -39,7 +39,7 @@ function index({ userRepos, userStarredRepos, user }) {
             <a href={`mailto:${user.email}`}>{user.email}</a>
           </div>
         </div>
-        <div>
+        <div className="flex-grow">
           {userRepos.map((repo) => {
             return (
               <Repo repo={repo} />

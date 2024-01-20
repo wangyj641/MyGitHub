@@ -16,7 +16,7 @@ export default function Repo({ repo }) {
                 </h3>
                 <p className='w-[400px]'>repo description ...</p>
                 <p className=''>
-                    <span className='mr-3'>{getLicense(repo.license)}</span>
+                    {repo.license ? (<span className='mr-3'>{getLicense(repo.license)}</span>) : null}
                     <span className='mr-3'>{getLastUpdated(repo.updated_at)}</span>
                     <span className='mr-3'>{repo.open_issues_count} open issues</span>
                 </p>
