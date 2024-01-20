@@ -42,7 +42,7 @@ function index({ userRepos, userStarredRepos, user }) {
         <div className="flex-grow">
           {userRepos.map((repo) => {
             return (
-              <Repo repo={repo} />
+              <Repo key={repo.id} repo={repo} />
             )
           })}
         </div>
