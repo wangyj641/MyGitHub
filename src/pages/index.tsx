@@ -40,7 +40,7 @@ function index({ userRepos, userStarredRepos, user }) {
           </p>
         </div>
         <div>
-          {userRepos.map((repo, index) => {
+          {userRepos.map((repo) => {
             return (
               <Repo repo={repo} />
             )
