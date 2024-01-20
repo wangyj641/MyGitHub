@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { connect } from "react-redux"
 import config from '../../global.config.js'
 import { Mail } from 'lucide-react'
+import Repo from '../components/Repo.tsx'
 
 const api = require("../lib/api")
 
@@ -27,19 +28,23 @@ function index({ userRepos, userStarredRepos, user }) {
   }
   else {
     return (
-      <div className="flex flex-start">
-        <div className="flex flex-col width-[200px] right-[40px]">
+      <div className="flex flex-start py-2 px-2">
+        <div className="flex flex-col width-[100px] mr-[40px]">
           <img src={user.avatar_url} alt="avatar" className="w-full rounded" />
-          <span className="text-lg, top-[20px]">{user.login}</span>
+          <span className="text-lg, mt-[20px]">{user.login}</span>
           <span className="text-base">{user.name}</span>
-          <span className="top-[20px]">{user.bio}</span>
+          <span className="my-[20px]">{user.bio}</span>
           <p>
             <Mail className="right-[10px]" />
             <a href={`mailto:${user.email}`}>{user.email}</a>
           </p>
         </div>
         <div>
-          <p>User repos</p>
+          {userRepos.map((repo, index) => {
+            return (
+              <Repo repo={repo} />
+            )
+          })}
         </div>
       </div>
     )
