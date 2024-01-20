@@ -2,6 +2,7 @@ import { useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { connect } from "react-redux"
 import config from '../../global.config.js'
+import { Mail } from 'lucide-react'
 
 const api = require("../lib/api")
 
@@ -26,8 +27,20 @@ function index({ userRepos, userStarredRepos, user }) {
   }
   else {
     return (
-      <div className="flex flex-col w-full h-full justify-between items-center p-1">
-        <span>index</span>
+      <div className="flex flex-start">
+        <div className="flex flex-col width-[200px] right-[40px]">
+          <img src={user.avatar_url} alt="avatar" className="w-full rounded" />
+          <span className="text-lg, top-[20px]">{user.login}</span>
+          <span className="text-base">{user.name}</span>
+          <span className="top-[20px]">{user.bio}</span>
+          <p>
+            <Mail className="right-[10px]" />
+            <a href={`mailto:${user.email}`}>{user.email}</a>
+          </p>
+        </div>
+        <div>
+          <p>User repos</p>
+        </div>
       </div>
     )
   }
@@ -56,7 +69,6 @@ index.getInitialProps = async ({ ctx, reduxStore }) => {
     },
     ctx.req,
     ctx.res)
-
 
   return {
     isLogin: true,
