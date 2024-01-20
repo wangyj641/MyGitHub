@@ -34,10 +34,10 @@ function index({ userRepos, userStarredRepos, user }) {
           <span className="text-lg, mt-[20px]">{user.login}</span>
           <span className="text-base">{user.name}</span>
           <span className="my-[20px]">{user.bio}</span>
-          <p>
-            <Mail className="right-[10px]" />
+          <div className='flex flex-row'>
+            <Mail className="mr-[10px]" />
             <a href={`mailto:${user.email}`}>{user.email}</a>
-          </p>
+          </div>
         </div>
         <div>
           {userRepos.map((repo) => {
