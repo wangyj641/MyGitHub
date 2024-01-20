@@ -4,14 +4,25 @@ import { connect } from "react-redux"
 import config from '../../global.config.js'
 import { Mail } from 'lucide-react'
 import Repo from '../components/Repo.tsx'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import Router, { withRouter } from "next/router"
 
 const api = require("../lib/api")
 
-function index({ userRepos, userStarredRepos, user }) {
+const handleTabSwitch = (activeKey) => {
+  console.log('---------------- handleTabSwitch ----------------')
+  console.log(activeKey)
+  Router.push(`/?key=${activeKey}`)
+}
+
+function index({ userRepos, userStarredRepos, user, router }) {
   console.log('---------------- index ----------------')
   //console.log(userRepos)
   //console.log(userStarredRepos)
   //console.log(user)
+  //console.log(router)
+
+  const tabKey = router.query.key || 'myRepos'
 
   if (!user || !user.id) {
     const loginUrl = config.OAUTH_URL
@@ -39,13 +50,30 @@ function index({ userRepos, userStarredRepos, user }) {
             <a href={`mailto:${user.email}`}>{user.email}</a>
           </div>
         </div>
-        <div className="flex-grow">
-          {userRepos.map((repo) => {
-            return (
-              <Repo key={repo.id} repo={repo} />
-            )
-          })}
-        </div>
+        <Tabs value={tabKey} className="w-[400px]" onValueChange={handleTabSwitch}>
+          <TabsList>
+            <TabsTrigger value="myRepos" >My repos</TabsTrigger>
+            <TabsTrigger value="myStarRepos">My star repos</TabsTrigger>
+          </TabsList>
+          <TabsContent value="myRepos">
+            <div className="flex-grow">
+              {userRepos.map((repo) => {
+                return (
+                  <Repo key={repo.id} repo={repo} />
+                )
+              })}
+            </div>
+          </TabsContent>
+          <TabsContent value="myStarRepos">
+            <div className="flex-grow">
+              {userStarredRepos.map((repo) => {
+                return (
+                  <Repo key={repo.id} repo={repo} />
+                )
+              })}
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
     )
   }
@@ -86,4 +114,4 @@ export default connect(function mapState(state) {
   return {
     user: state.user
   }
-})(index)
+})(withRouter(index))

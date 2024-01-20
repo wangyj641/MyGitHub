@@ -9,7 +9,7 @@ function getLicense(license) {
 export default function Repo({ repo }) {
     return (
         <div className='flex flex-row justify-between border-y-[1px] border-solid border-gray-200 pt-[20px]'>
-            <div className='flex flex-col'>
+            <div className='flex flex-col mr-[40px]'>
                 <h3 className='text-xl'>
                     <Link legacyBehavior href={`/detail?owner=${repo.owner.login}&name=${repo.name}`} passHref>
                         <a>{repo.full_name}</a>
@@ -24,7 +24,7 @@ export default function Repo({ repo }) {
             </div>
             <div className='flex flex-row'>
                 <span className='w-[170px]'>{repo.language}</span>
-                <span className='w-[20px]'>{repo.stargazers_count}</span>
+                <span className=''>{repo.stargazers_count}</span>
                 <Star size={16} className='mt-1' />
             </div >
         </div >
