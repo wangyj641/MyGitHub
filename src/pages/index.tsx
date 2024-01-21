@@ -6,16 +6,23 @@ import { Mail } from 'lucide-react'
 import Repo from '../components/Repo.tsx'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Router, { withRouter } from "next/router"
+import { LRUCache } from "lru-cache"
 
 const api = require("../lib/api")
 
 const isServer = typeof window === 'undefined'
 
-// cache data
-let cachedUserRepos, cachedUserStateRepos
+const options = {
+  max: 500,
+  // how long to live in ms
+  ttl: 1000 * 60 * 60, // 1 hour
+}
+
+// apply LRU cache, after TTL, delete the cache
+const cache = new LRUCache(options)
 
 const handleTabSwitch = (activeKey) => {
-  console.log('---------------- handleTabSwitch ----------------')
+  //console.log('---------------- handleTabSwitch ----------------')
   console.log(activeKey)
   Router.push(`/?key=${activeKey}`)
 }
@@ -32,12 +39,16 @@ function index({ userRepos, userStarredRepos, user, router }) {
   useEffect(() => {
     console.log('---------------- index useEffect ----------------')
     if (!isServer) {
-      // cache data
-      cachedUserRepos = userRepos
-      cachedUserStateRepos = userStarredRepos
+      if (userRepos) {
+        console.log('---------------- set cache ----------------')
+        cache.set('userRepos', userRepos)
+      }
+
+      if (userStarredRepos) {
+        cache.set('userStarredRepos', userStarredRepos)
+      }
     }
   }, [userRepos, userStarredRepos])
-
 
   if (!user || !user.id) {
     const loginUrl = config.OAUTH_URL
@@ -104,12 +115,12 @@ index.getInitialProps = async ({ ctx, reduxStore }) => {
 
   if (!isServer) {
     // apply cache data
-    if (cachedUserRepos && cachedUserStateRepos) {
+    if (cache.get('userRepos') && cache.get('userStarredRepos')) {
       console.log('---------------- apply cache data ----------------')
       return {
         isLogin: true,
-        userRepos: cachedUserRepos,
-        userStarredRepos: cachedUserStateRepos
+        userRepos: cache.get('userRepos'),
+        userStarredRepos: cache.get('userStarredRepos')
       }
     }
   }
@@ -127,12 +138,6 @@ index.getInitialProps = async ({ ctx, reduxStore }) => {
     },
     ctx.req,
     ctx.res)
-
-  if (!isServer) {
-    // cache data
-    cachedUserRepos = userRepos.data
-    cachedUserStateRepos = userStarredRepos.data
-  }
 
   return {
     isLogin: true,
