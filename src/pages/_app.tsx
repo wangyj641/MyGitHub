@@ -15,28 +15,28 @@ class MyApp extends App {
   }
 
   startLoading = () => {
-    console.log('----------------- app start loading -----------------')
+    //console.log('----------------- app start loading -----------------')
     this.setState({
       loading: true
     })
   }
 
   stopLoading = () => {
-    console.log('----------------- app stop loading -----------------')
+    //console.log('----------------- app stop loading -----------------')
     this.setState({
       loading: false
     })
   }
 
   componentDidMount() {
-    console.log('----------------- app did mount -----------------')
+    //console.log('----------------- app did mount -----------------')
     Router.events.on('routeChangeStart', this.startLoading)
     Router.events.on('routeChangeComplete', this.stopLoading)
     Router.events.on('routeChangeError', this.stopLoading)
   }
 
   componentWillUnmount() {
-    console.log('----------------- app will unmount -----------------')
+    //console.log('----------------- app will unmount -----------------')
     Router.events.off('routeChangeStart', this.startLoading)
     Router.events.off('routeChangeComplete', this.stopLoading)
     Router.events.off('routeChangeError', this.stopLoading)

@@ -9,6 +9,11 @@ import Router, { withRouter } from "next/router"
 
 const api = require("../lib/api")
 
+const isServer = typeof window === 'undefined'
+
+// cache data
+let cachedUserRepos, cachedUserStateRepos
+
 const handleTabSwitch = (activeKey) => {
   console.log('---------------- handleTabSwitch ----------------')
   console.log(activeKey)
@@ -23,6 +28,16 @@ function index({ userRepos, userStarredRepos, user, router }) {
   //console.log(router)
 
   const tabKey = router.query.key || 'myRepos'
+
+  useEffect(() => {
+    console.log('---------------- index useEffect ----------------')
+    if (!isServer) {
+      // cache data
+      cachedUserRepos = userRepos
+      cachedUserStateRepos = userStarredRepos
+    }
+  }, [userRepos, userStarredRepos])
+
 
   if (!user || !user.id) {
     const loginUrl = config.OAUTH_URL
@@ -50,30 +65,28 @@ function index({ userRepos, userStarredRepos, user, router }) {
             <a href={`mailto:${user.email}`}>{user.email}</a>
           </div>
         </div>
-        <Tabs value={tabKey} className="w-[400px]" onValueChange={handleTabSwitch}>
-          <TabsList>
-            <TabsTrigger value="myRepos" >My repos</TabsTrigger>
-            <TabsTrigger value="myStarRepos">My star repos</TabsTrigger>
-          </TabsList>
-          <TabsContent value="myRepos">
-            <div className="flex-grow">
+        <div className="flex-grow">
+          <Tabs value={tabKey} className="w-[400px]" onValueChange={handleTabSwitch}>
+            <TabsList>
+              <TabsTrigger value="myRepos" >My repos</TabsTrigger>
+              <TabsTrigger value="myStarRepos">My star repos</TabsTrigger>
+            </TabsList>
+            <TabsContent value="myRepos">
               {userRepos.map((repo) => {
                 return (
                   <Repo key={repo.id} repo={repo} />
                 )
               })}
-            </div>
-          </TabsContent>
-          <TabsContent value="myStarRepos">
-            <div className="flex-grow">
+            </TabsContent>
+            <TabsContent value="myStarRepos">
               {userStarredRepos.map((repo) => {
                 return (
                   <Repo key={repo.id} repo={repo} />
                 )
               })}
-            </div>
-          </TabsContent>
-        </Tabs>
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
     )
   }
@@ -86,6 +99,18 @@ index.getInitialProps = async ({ ctx, reduxStore }) => {
   if (!user || !user.id) {
     return {
       isLogin: false
+    }
+  }
+
+  if (!isServer) {
+    // apply cache data
+    if (cachedUserRepos && cachedUserStateRepos) {
+      console.log('---------------- apply cache data ----------------')
+      return {
+        isLogin: true,
+        userRepos: cachedUserRepos,
+        userStarredRepos: cachedUserStateRepos
+      }
     }
   }
 
@@ -102,6 +127,12 @@ index.getInitialProps = async ({ ctx, reduxStore }) => {
     },
     ctx.req,
     ctx.res)
+
+  if (!isServer) {
+    // cache data
+    cachedUserRepos = userRepos.data
+    cachedUserStateRepos = userStarredRepos.data
+  }
 
   return {
     isLogin: true,
