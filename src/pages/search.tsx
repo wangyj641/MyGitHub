@@ -1,18 +1,72 @@
-import { withRouter } from "next/router"
+import Router, { withRouter } from "next/router"
 
 const api = require("../lib/api")
+
+const LANGUAGES = ['JavaScript', 'TypeScript', 'HTML', 'CSS', 'Java', 'Rust']
+
+const SORT_TYPES = [
+  {
+    name: "Best Match",
+  },
+  {
+    name: "Most stars",
+    value: "stars",
+    order: "desc",
+  },
+  {
+    name: "Fewest stars",
+    value: "stars",
+    order: "asc",
+  },
+  {
+    name: "Most forks",
+    value: "forks",
+    order: "desc",
+  },
+  {
+    name: "Fewest forks",
+    value: "forks",
+    order: "asc",
+  }
+]
 
 function search({ router, repos }) {
   console.log('---------------- search ----------------')
   //console.log(router)
   console.log(repos)
 
+  //const { q, lang, sort, order } = router.query
+
   const query = router.query.q
   console.log(query)
 
+  const handleLanguageChange = (e) => {
+    console.log('---------------- handleLanguageChange ----------------')
+    console.log(e.target.innerText)
+
+    Router.push({
+      pathname: '/search',
+      query: {
+        ...router.query,
+        lang: e.target.innerText,
+      }
+    })
+  }
+
   return (
-    <div className="flex flex-col w-full h-full justify-between items-center p-1">
-      <span>search</span>
+    <div className="flex flex-col h-full justify-between items-center p-1">
+      <span>Language</span>
+      <div className="flex flex-col w-[100px] h-full justify-between items-center p-1">
+        <ul>
+          {
+            LANGUAGES.map(lang => (
+              <li key={lang} className="text-lg">
+                <a onClick={handleLanguageChange}>{lang}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
     </div>
   )
 }
