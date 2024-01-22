@@ -35,8 +35,6 @@ function search({ router, repos }) {
   //console.log(router)
   console.log(repos)
 
-  //const { q, lang, sort, order } = router.query
-
   const query = router.query.q
   console.log(query)
 
@@ -59,11 +57,20 @@ function search({ router, repos }) {
       <div className="flex flex-col w-[100px] h-full justify-between items-center p-1">
         <ul>
           {
-            LANGUAGES.map(lang => (
-              <li key={lang} className="text-lg">
-                <a onClick={handleLanguageChange}>{lang}</a>
-              </li>
-            ))
+            LANGUAGES.map(lang => {
+              console.log(lang)
+              return (
+                lang === router.query.lang ? (
+                  <li key={lang} className="px-2 py-1 rounded-lg">
+                    <a onClick={handleLanguageChange} className="text-lg">{lang}</a>
+                  </li>
+                ) : (
+                  <li key={lang} className="px-2 py-1 rounded-lg">
+                    <a onClick={handleLanguageChange} className="text-sm">{lang}</a>
+                  </li>
+                ))
+            }
+            )
           }
         </ul>
       </div>
