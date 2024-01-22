@@ -19,9 +19,9 @@ function search({ router, repos }) {
 
 search.getInitialProps = async ({ ctx }) => {
   console.log('---------------- search getInitialProps ----------------')
-  console.log(ctx)
-  console.log(ctx.query)
+  //console.log(ctx.query)
   const { q, sort, lang, order, page } = ctx.query
+  console.log(q, sort, lang, order, page)
 
   if (!q) {
     return {
@@ -31,7 +31,6 @@ search.getInitialProps = async ({ ctx }) => {
     }
   }
 
-  console.log('---------------- search getInitialProps 2----------------')
   let queryString = `?q=${q}`
   if (lang) {
     queryString += `&l=${lang}`
@@ -45,11 +44,13 @@ search.getInitialProps = async ({ ctx }) => {
     queryString += `&page=${page}`
   }
 
-  console.log(queryString)
+  //console.log(queryString)
+  const new_url = `/search/repositories${queryString}`
+  console.log(new_url)
 
   const result = await api.request(
     {
-      url: `search/repositories${queryString}`
+      url: new_url
     },
     ctx.req,
     ctx.res

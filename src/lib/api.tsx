@@ -5,12 +5,13 @@ const github_base_url = 'https://api.github.com'
 const isServer = typeof window === 'undefined'
 
 async function requestGithub(method, url, data, headers) {
-  console.log('-------------------- lib api------------------------------')
-  console.log(url)
+  console.log('-------------------- requestGithub ------------------------------')
+  const new_url = `${github_base_url}${url}`
+  console.log(new_url)
 
   return await axios({
     method,
-    url: `${github_base_url}${url}`,
+    url: new_url,
     data,
     headers
   })
@@ -21,6 +22,9 @@ async function request({ method = 'GET', url, data = {} }, req, res) {
     throw new Error('url is required')
   }
 
+  console.log('-------------------- lib request ------------------------------')
+  console.log(url)
+
   if (isServer) {
     const headers = {}
     const githubAuth = req.session.githubAuth || {}
@@ -30,9 +34,11 @@ async function request({ method = 'GET', url, data = {} }, req, res) {
     return await requestGithub(method, url, data, headers)
   }
   else {
+    const new_url = `/github${url}`
+    console.log(new_url)
     return await axios({
       method,
-      url: `/github${url}`,
+      url: new_url,
       data
     })
   }
