@@ -1,4 +1,5 @@
 import Router, { withRouter } from "next/router"
+import Link from "next/link"
 
 const api = require("../lib/api")
 
@@ -30,26 +31,40 @@ const SORT_TYPES = [
   }
 ]
 
+const slecltedItemStyle = 'px-2 py-1 rounded-lg text-lg'
+
+const FilterLink = ({ name, q, order, sort, lang }) => {
+  console.log('---------------- FilterLink ----------------')
+
+  let queryString = `?q=${q}`
+  if (lang) {
+    queryString += `&lang=${lang}`
+  }
+
+  if (sort) {
+    queryString += `&sort=${sort}&order=${order || 'desc'}`
+  }
+
+  // if (page) {
+  //   queryString += `&page=${page}`
+  // }
+
+  //console.log(queryString)
+  const new_url = `/search${queryString}`
+  console.log(new_url)
+
+  return (
+    <Link legacyBehavior href={new_url}>{name}</Link>
+  )
+}
+
 function search({ router, repos }) {
   console.log('---------------- search ----------------')
   //console.log(router)
-  console.log(repos)
-
-  const query = router.query.q
-  console.log(query)
-
-  const handleLanguageChange = (e) => {
-    console.log('---------------- handleLanguageChange ----------------')
-    console.log(e.target.innerText)
-
-    Router.push({
-      pathname: '/search',
-      query: {
-        ...router.query,
-        lang: e.target.innerText,
-      }
-    })
-  }
+  //console.log(repos)
+  //console.log(router.query)
+  const { ...querys } = router.query
+  const { q, lang, sort, order } = router.query
 
   return (
     <div className="flex flex-col h-full justify-between items-center p-1">
@@ -57,24 +72,24 @@ function search({ router, repos }) {
       <div className="flex flex-col w-[100px] h-full justify-between items-center p-1">
         <ul>
           {
-            LANGUAGES.map(lang => {
-              console.log(lang)
+            LANGUAGES.map(item => {
+              console.log(item)
+              const selected = item === lang
               return (
-                lang === router.query.lang ? (
-                  <li key={lang} className="px-2 py-1 rounded-lg">
-                    <a onClick={handleLanguageChange} className="text-lg">{lang}</a>
-                  </li>
-                ) : (
-                  <li key={lang} className="px-2 py-1 rounded-lg">
-                    <a onClick={handleLanguageChange} className="text-sm">{lang}</a>
-                  </li>
-                ))
+                <li key={item} className={selected ? (slecltedItemStyle) : ('')}>
+                  {selected ? (
+                    <span className="text-red-500">{item}</span>
+                  ) : (
+                    <FilterLink {...querys} lang={item} name={item} />
+                  )}
+                </li>
+              )
             }
             )
           }
         </ul>
       </div>
-    </div>
+    </div >
   )
 }
 
@@ -105,7 +120,6 @@ search.getInitialProps = async ({ ctx }) => {
     queryString += `&page=${page}`
   }
 
-  //console.log(queryString)
   const new_url = `/search/repositories${queryString}`
   console.log(new_url)
 
