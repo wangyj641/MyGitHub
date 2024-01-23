@@ -1,5 +1,16 @@
-import Router, { withRouter } from "next/router"
+import { withRouter } from "next/router"
 import Link from "next/link"
+import { memo } from "react"
+import Repo from '../components/Repo.tsx'
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
 
 const api = require("../lib/api")
 
@@ -33,7 +44,7 @@ const SORT_TYPES = [
 
 const slecltedItemStyle = 'px-2 py-1 rounded-lg text-lg'
 
-const FilterLink = ({ name, q, order, sort, lang }) => {
+const FilterLink = memo(({ name, q, order, sort, lang }) => {
   console.log('---------------- FilterLink ----------------')
 
   let queryString = `?q=${q}`
@@ -53,10 +64,8 @@ const FilterLink = ({ name, q, order, sort, lang }) => {
   const new_url = `/search${queryString}`
   console.log(new_url)
 
-  return (
-    <Link legacyBehavior href={new_url}>{name}</Link>
-  )
-}
+  return (<Link legacyBehavior href={new_url}>{name}</Link>)
+})
 
 function search({ router, repos }) {
   console.log('---------------- search ----------------')
@@ -67,35 +76,60 @@ function search({ router, repos }) {
   const { q, lang, sort, order } = router.query
 
   return (
-    <div className="flex flex-col h-full justify-between items-center p-1">
-      <span>Language</span>
-      <div className="flex flex-col w-[100px] h-full justify-between items-center p-1">
-        <ul>
-          {
-            LANGUAGES.map(item => {
-              console.log(item)
-              const selected = item === lang
-              return (
-                <li key={item} className={selected ? (slecltedItemStyle) : ('')}>
-                  {selected ? (
-                    <span className="text-red-500">{item}</span>
-                  ) : (
-                    <FilterLink {...querys} lang={item} name={item} />
-                  )}
-                </li>
+    <div className="flex">
+      <div className="flex flex-col h-full w-[200px] justify-between items-center p-1">
+        <span>Language</span>
+        <div className="flex flex-col w-[100px] h-full justify-between items-center p-1">
+          <ul>
+            {
+              LANGUAGES.map(item => {
+                console.log(item)
+                const selected = item === lang
+                return (
+                  <li key={item} className={selected ? (slecltedItemStyle) : ('')}>
+                    {selected ? (
+                      <span className="text-red-500">{item}</span>
+                    ) : (
+                      <FilterLink {...querys} lang={item} name={item} />
+                    )}
+                  </li>
+                )
+              }
               )
             }
-            )
-          }
-        </ul>
+          </ul>
+        </div>
+      </div >
+      <div className="flex flex-col h-full w-[800px] justify-between items-center p-1">
+        <h3 className="text-3xl font-bold">Search Results: {repos.total_count}</h3>
+        {repos.items.map((repo) => {
+          return (
+            <Repo key={repo.id} repo={repo} />
+          )
+        })}
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious href="#" />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#">1</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationEllipsis />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationNext href="#" />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       </div>
-    </div >
+    </div>
   )
 }
 
 search.getInitialProps = async ({ ctx }) => {
   console.log('---------------- search getInitialProps ----------------')
-  //console.log(ctx.query)
   const { q, sort, lang, order, page } = ctx.query
   console.log(q, sort, lang, order, page)
 
