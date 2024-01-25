@@ -15,7 +15,7 @@ function makeQuery(queryObject) {
   return `?${query}`
 }
 
-export default function (Comp) {
+export default function (Comp, type) {
   function withDetail({ repoBasic, router, ...rest }) {
     console.log('---------------- withDetail ----------------')
     const query = makeQuery(router.query)
@@ -27,17 +27,20 @@ export default function (Comp) {
           <Repo repo={repoBasic} />
           <div className="flex mt-[20px]">
             <div className="flex mr-[20px]">
-              <Link href={`/detail${query}`} legacyBehavior className="text-red-500">Readme</Link>
+              {type === 'index' ? <span className='text-red-500'>Readme</span> :
+                <Link href={`/detail${query}`} legacyBehavior>Readme</Link>}
             </div>
-            <div className="flex mr-[20px]">
-              <Link href={`/detail/issues${query}`} legacyBehavior className="text-red-500">Issues</Link>
+            <div className="flex mr-[20px] ">
+              {type === 'issues' ? <span className='text-red-500'>Issues</span> :
+                <Link href={`/detail/issues${query}`} legacyBehavior>Issues</Link>
+              }
             </div>
           </div>
         </div>
         <div className="flex flex-col w-full h-full p-5 mb-[20px]">
           <Comp {...rest} />
         </div>
-      </div>
+      </div >
     )
   }
 

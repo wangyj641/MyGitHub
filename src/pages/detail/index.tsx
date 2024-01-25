@@ -3,7 +3,7 @@ import withRepoBasic from '@/components/with-repo-basic'
 function detail({ text }) {
   return (
     <div>
-      <h1>Detail add {text}</h1>
+      <h1>detail add {text}</h1>
     </div>
   )
 }
@@ -15,4 +15,4 @@ detail.getInitialProps = async ({ ctx }) => {
   }
 }
 
-export default withRepoBasic(detail)
+export default withRepoBasic(detail, 'index')
