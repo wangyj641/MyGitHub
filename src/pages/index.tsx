@@ -14,7 +14,7 @@ const api = require("../lib/api")
 const isServer = typeof window === 'undefined'
 
 const options = {
-  max: 500,
+  max: 5000,
   // how long to live in ms
   ttl: 1000 * 60 * 60, // 1 hour
 }
@@ -118,6 +118,7 @@ index.getInitialProps = async ({ ctx, reduxStore }) => {
 
   if (!isServer) {
     // apply cache data
+    console.log('---------------- not server ----------------')
     if (cache.get('userRepos') && cache.get('userStarredRepos')) {
       console.log('---------------- apply cache data ----------------')
       return {

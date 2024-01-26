@@ -4,10 +4,13 @@ const Router = require('koa-router')
 const session = require('koa-session')
 const Redis = require('ioredis')
 const { koaBody } = require('koa-body')
+const atob = require('atob')
 
 const RedisSessionStore = require('./server/session-store.tsx')
 const auth = require('./server/auth.tsx')
 const api = require('./server/api.tsx')
+
+global.atob = atob
 
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })

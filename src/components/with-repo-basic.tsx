@@ -59,14 +59,15 @@ export default function (Comp, type) {
     )
   }
 
-  withDetail.getInitialProps = async ({ ctx }) => {
+  withDetail.getInitialProps = async (context) => {
     console.log('---------------- withDetail.getInitialProps ----------------')
+    const { ctx } = context
     const { owner, name } = ctx.query
     console.log(owner, name)
 
     let pageData = {}
     if (Comp.getInitialProps) {
-      pageData = await Comp.getInitialProps(ctx)
+      pageData = await Comp.getInitialProps(context)
     }
 
     const repoFullName = `${owner}/${name}`
