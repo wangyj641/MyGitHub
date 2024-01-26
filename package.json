@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "serve": "node src/main.tsx"
+    "serve": "node src/main.tsx",
+    "analyze:browser": "cross-env BUNDLE_ANALYZE=browser next build"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.0.4",
@@ -19,11 +20,13 @@
     "@types/node": "20.4.5",
     "@types/react": "18.2.17",
     "@types/react-dom": "18.2.7",
+    "@zeit/next-bundle-analyzer": "^0.1.2",
     "atob": "^2.1.2",
     "autoprefixer": "10.4.14",
     "axios": "^1.6.5",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "cross-env": "^7.0.3",
     "eslint": "8.46.0",
     "eslint-config-next": "13.4.12",
     "github-markdown-css": "^5.5.0",

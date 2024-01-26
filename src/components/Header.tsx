@@ -27,98 +27,111 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 // NOTICE: {} is needed to be an props object
-function Header({ router, user, logout }) {
+function Header({
+  router,
+  user,
+  logout,
+}: {
+  router: any;
+  user?: {
+    id: string;
+    login: string;
+    avatar_url: string;
+  };
+  logout: () => void;
+}) {
   //console.log('---------------- Header ----------------')
-  const urlQuery = router.query.q
+  const urlQuery = router.query.q;
 
-  const [search, setSearch] = useState(urlQuery || '')
+  const [search, setSearch] = useState(urlQuery || "");
 
-  const handleSearchChange = useCallback((event: any) => {
-    console.log('---------------- handleSearchChange ----------------')
-    setSearch(event.target.value)
-  }, [setSearch])
+  const handleSearchChange = useCallback(
+    (event: any) => {
+      console.log("---------------- handleSearchChange ----------------");
+      setSearch(event.target.value);
+    },
+    [setSearch]
+  );
 
   const handleOnSearch = useCallback(() => {
-    console.log('---------------- handleOnSearch ----------------')
-    console.log(search)
-    router.push(`/search?q=${search}`)
-  }, [search])
+    console.log("---------------- handleOnSearch ----------------");
+    console.log(search);
+    router.push(`/search?q=${search}`);
+  }, [search]);
 
   const handleLogout = useCallback(() => {
-    logout()
-  }, [logout])
+    logout();
+  }, [logout]);
 
   return (
-    <div className='flex h-20 w-full items-center justify-between border-b border-gray-200 bg-black'>
-      <div className='relative flex items-center sm:flex left-4'>
-        <Link href={'/'} passHref>
+    <div className="flex h-20 w-full items-center justify-between border-b border-gray-200 bg-black">
+      <div className="relative flex items-center sm:flex left-4">
+        <Link href={"/"} passHref>
           <Github color="red" />
         </Link>
-        <Input type="search"
+        <Input
+          type="search"
           placeholder="Find a repository..."
           value={search}
           onChange={handleSearchChange}
-          className='relative left-2 w-60'
+          className="relative left-2 w-60"
         />
-        <Button type="submit"
+        <Button
+          type="submit"
           onClick={handleOnSearch}
-          className='relative left-3'>
-          Search</Button>
+          className="relative left-3"
+        >
+          Search
+        </Button>
       </div>
 
-      <div className='flex items-center justify-center'>
-        {
-          user && user.id ?
-            (
-              <DropdownMenu>
-                <DropdownMenuTrigger className='relative right-40 overflow-visible'>
-                  < a href='/'>
-                    <Avatar>
-                      <AvatarImage src={user.avatar_url} />
-                      <AvatarFallback>User</AvatarFallback>
-                    </Avatar>
-                  </a>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuLabel>{user.login}</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout}>
-                    <a href='javascript:void(0)'>
-                      Logout
-                    </a>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) :
-            (
-              <TooltipProvider >
-                <Tooltip >
-                  <TooltipTrigger>
-                    <a href={`/prepare-auth?url=${router.asPath}`}>
-                      <User className='relative right-40' color="red" />
-                    </a>
-                  </TooltipTrigger>
-                  <TooltipContent className='relative right-20'>
-                    <p>Please login</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            )
-        }
+      <div className="flex items-center justify-center">
+        {user && user.id ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger className="relative right-40 overflow-visible">
+              <a href="/">
+                <Avatar>
+                  <AvatarImage src={user.avatar_url} />
+                  <AvatarFallback>User</AvatarFallback>
+                </Avatar>
+              </a>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel>{user.login}</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleLogout}>
+                <a href="javascript:void(0)">Logout</a>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <a href={`/prepare-auth?url=${router.asPath}`}>
+                  <User className="relative right-40" color="red" />
+                </a>
+              </TooltipTrigger>
+              <TooltipContent className="relative right-20">
+                <p>Please login</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
       </div>
-    </div >
-  )
+    </div>
+  );
 }
 
 export default connect(
-  function mapState(state) {
+  (state: any) => {
     return {
-      user: state.user
-    }
+      user: state.user,
+    };
   },
-  function mapReducer(dispatch) {
+  (dispatch: any) => {
     return {
-      logout: () => dispatch(logout())
-    }
-  },
-)(withRouter(Header))
+      logout: () => dispatch(logout()),
+    };
+  }
+)(withRouter(Header));
