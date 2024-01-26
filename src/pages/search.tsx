@@ -1,7 +1,9 @@
 import { withRouter } from "next/router"
 import Link from "next/link"
-import { memo } from "react"
+import { memo, useEffect } from "react"
 import Repo from '../components/Repo.tsx'
+import { cacheRepos } from '../lib/repo-basic-cache.tsx'
+
 import {
   Pagination,
   PaginationContent,
@@ -44,6 +46,8 @@ const SORT_TYPES = [
 
 const slecltedItemStyle = 'px-2 py-1 rounded-lg text-lg'
 
+const isServer = typeof window === 'undefined'
+
 const FilterLink = memo(({ name, q, order, sort, lang }) => {
   console.log('---------------- FilterLink ----------------')
 
@@ -74,6 +78,15 @@ function search({ router, repos }) {
   //console.log(router.query)
   const { ...querys } = router.query
   const { q, lang, sort, order } = router.query
+
+  useEffect(() => {
+    //console.log('---------------- search useEffect ----------------')
+    if (!isServer) {
+      if (repos) {
+        cacheRepos(repos.items)
+      }
+    }
+  }, [repos])
 
   return (
     <div className="flex">

@@ -2,6 +2,10 @@ import Link from 'next/link'
 import Repo from './Repo'
 import api from "../lib/api"
 import { withRouter } from 'next/router'
+import { getRepoFromCache, cacheRepo } from '../lib/repo-basic-cache.tsx'
+import { useEffect, useState } from "react"
+
+const isServer = typeof window === 'undefined'
 
 // get current query string from router
 // actually, it is the current url substring
@@ -20,6 +24,17 @@ export default function (Comp, type) {
     console.log('---------------- withDetail ----------------')
     const query = makeQuery(router.query)
     console.log(query)
+
+    useEffect(() => {
+      console.log('---------------- withDetail useEffect ----------------')
+      if (!isServer) {
+        if (repoBasic) {
+          console.log('---------------- set cache ----------------')
+          cacheRepo(repoBasic)
+        }
+      }
+    }, [repoBasic])
+
 
     return (
       <div className="flex flex-col w-full h-full p-1 pt-[20px]">
@@ -49,6 +64,19 @@ export default function (Comp, type) {
     const { owner, name } = ctx.query
     console.log(owner, name)
 
+    let pageData = {}
+    if (Comp.getInitialProps) {
+      pageData = await Comp.getInitialProps(ctx)
+    }
+
+    const repoFullName = `${owner}/${name}`
+    if (getRepoFromCache(repoFullName)) {
+      return {
+        repoBasic: getRepoFromCache(repoFullName),
+        ...pageData
+      }
+    }
+
     const repoBasic = await api.request(
       {
         url: `/repos/${owner}/${name}`,
@@ -57,11 +85,6 @@ export default function (Comp, type) {
       ctx.res)
 
     console.log(repoBasic)
-
-    let pageData = {}
-    if (Comp.getInitialProps) {
-      pageData = await Comp.getInitialProps(ctx)
-    }
 
     return {
       repoBasic: repoBasic.data,

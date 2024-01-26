@@ -7,6 +7,7 @@ import Repo from '../components/Repo.tsx'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Router, { withRouter } from "next/router"
 import { LRUCache } from "lru-cache"
+import { cacheRepos } from '../lib/repo-basic-cache.tsx'
 
 const api = require("../lib/api")
 
@@ -42,10 +43,12 @@ function index({ userRepos, userStarredRepos, user, router }) {
       if (userRepos) {
         console.log('---------------- set cache ----------------')
         cache.set('userRepos', userRepos)
+        cacheRepos(userRepos)
       }
 
       if (userStarredRepos) {
         cache.set('userStarredRepos', userStarredRepos)
+        cacheRepos(userStarredRepos)
       }
     }
   }, [userRepos, userStarredRepos])
