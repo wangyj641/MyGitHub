@@ -1,9 +1,14 @@
+import dynamic from 'next/dynamic'
 import withRepoBasic from '@/components/with-repo-basic'
 import api from '@/lib/api'
-import MarkdownRender from '@/components/MarkdownRender'
+
+const MDRender = dynamic(
+  () => import('@/components/MarkdownRender'),
+  { loading: () => <div>Loading...</div> }
+)
 
 function detail({ readme }) {
-  return <MarkdownRender content={readme.content} isBase64={true} />
+  return <MDRender content={readme.content} isBase64={true} />
 }
 
 detail.getInitialProps = async ({ ctx }) => {

@@ -20,7 +20,7 @@ export function getRepoFromCache(repoFullName) {
 }
 
 export function cacheRepos(repos) {
-  repos.forEach(repo => {
-    cacheRepo(repo)
-  })
+  if (repos && Array.isArray(repos)) {
+    repos.forEach(repo => cacheRepo(repo))
+  }
 }
