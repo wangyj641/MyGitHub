@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { useState, useCallback } from 'react'
 import { getLastUpdated } from '../../lib/utils'
+import SearchUser from '@/components/SearchUser'
 
 const MDRender = dynamic(
   () => import('@/components/MarkdownRender'),
@@ -60,6 +61,7 @@ function issues({ issues }) {
   console.log(issues)
   return (
     <div className='flex flex-col mb-[20px] mt-[20px] border-2 border-gray-200 rounded-md'>
+      <SearchUser />
       {issues.map(issue => (
         <IssueItem issue={issue} key={issue.id} />
       ))
