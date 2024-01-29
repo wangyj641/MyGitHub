@@ -28,7 +28,7 @@ function IssueDetail({ issue }) {
 }
 
 function IssueItem({ issue }) {
-  console.log(issue)
+  //console.log(issue)
   const [showDetail, setShowDetail] = useState(false)
 
   const toggleShowDetail = useCallback(() => {
@@ -58,7 +58,7 @@ function IssueItem({ issue }) {
 
 function issues({ issues }) {
   console.log('---------------- issues ----------------')
-  console.log(issues)
+  //console.log(issues)
   return (
     <div className='flex flex-col mb-[20px] mt-[20px] border-2 border-gray-200 rounded-md'>
       <SearchUser />
