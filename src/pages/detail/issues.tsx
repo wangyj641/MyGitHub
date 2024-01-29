@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { useState, useCallback } from 'react'
 import { getLastUpdated } from '../../lib/utils'
 import SearchUser from '@/components/SearchUser'
+import Select, { ActionMeta, OnChangeValue, StylesConfig } from 'react-select';
 
 const MDRender = dynamic(
   () => import('@/components/MarkdownRender'),
@@ -56,12 +57,71 @@ function IssueItem({ issue }) {
   )
 }
 
-function issues({ issues }) {
+const options = [
+  { value: 'all', label: 'All' },
+  { value: 'open', label: 'Open' },
+  { value: 'closed', label: 'Closed' }
+]
+
+function issues({ issues, labels }) {
   console.log('---------------- issues ----------------')
-  //console.log(issues)
+  console.log(labels)
+
+  const [creator, setCreator] = useState();
+  const [state, setState] = useState();
+  const [label, setLabel] = useState([]);
+
+  const handleCreatorChange = useCallback(value => {
+    setCreator(value)
+  }, []);
+
+  const handleStateChange = useCallback(value => {
+    setState(value)
+  }, []);
+
+  const handleLabelChange = useCallback(value => {
+    setLabel(value)
+  }, []);
+
+  const handleSearch = useCallback(value => {
+
+  }, []);
+
+
   return (
     <div className='flex flex-col mb-[20px] mt-[20px] border-2 border-gray-200 rounded-md'>
       <SearchUser />
+      <Select
+        placeholder="State"
+        onChange={handleStateChange}
+        value={state}
+        options={options}
+      />
+
+      <Select
+        placeholder="Label"
+        isMulti
+        onChange={handleLabelChange}
+        value={label}
+        options=
+        {
+          labels.map(label => {
+            return {
+              value: label.name,
+              label: label.name
+            }
+          })
+        }
+      />
+
+      <Button
+        type="submit"
+        onClick={handleSearch}
+        className="relative"
+      >
+        Search
+      </Button>
+
       {issues.map(issue => (
         <IssueItem issue={issue} key={issue.id} />
       ))
@@ -74,18 +134,28 @@ issues.getInitialProps = async ({ ctx }) => {
   console.log('---------------- issues.getInitialProps ----------------')
   //console.log(ctx)
   const { owner, name } = ctx.query
-  const url = `/repos/${owner}/${name}/issues`
-  console.log(url)
+  const issuesUrl = `/repos/${owner}/${name}/issues`
+  const labelsUrl = `/repos/${owner}/${name}/labels`
+  console.log(issuesUrl, labelsUrl)
   const issuesResp = await api.request(
     {
-      url: url
+      url: issuesUrl
+    },
+    ctx.req,
+    ctx.res
+  )
+
+  const labelsResp = await api.request(
+    {
+      url: labelsUrl
     },
     ctx.req,
     ctx.res
   )
 
   return {
-    issues: issuesResp.data
+    issues: issuesResp.data,
+    labels: labelsResp.data
   }
 }
 
