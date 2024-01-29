@@ -5,7 +5,7 @@ import { useState, useCallback, useRef } from 'react';
 
 export default function SearchUser() {
   const [fetching, setFetching] = useState(false);
-  const [options, setOptions] = useState([{}]);
+  const [options, setOptions] = useState([]);
 
   const getOptions = () => {
     //console.log(option)
@@ -28,6 +28,7 @@ export default function SearchUser() {
       options.length = 0
       options.push(data[0])
       options.push(data[1])
+      setOptions([...options])
       console.log(options)
     })
   }
