@@ -35,8 +35,16 @@ function IssueDetail({ issue }) {
   )
 }
 
+function Label({ label }) {
+  console.log('---------------- Label ----------------')
+  console.log(label)
+  return (
+    <span className='text-sm p-[10px] ml-[15px]' style={{ background: `#${label.color}` }} > {label.name}</span >
+  )
+}
+
 function IssueItem({ issue }) {
-  //console.log(issue)
+  console.log(issue)
   const [showDetail, setShowDetail] = useState(false)
 
   const toggleShowDetail = useCallback(() => {
@@ -56,6 +64,13 @@ function IssueItem({ issue }) {
         </Avatar>
         <div className='flex flex-col '>
           <div className='text-base max-w-[600px] pr-[40px]'>{issue.title}</div>
+          <div className='flex flex-row'>
+            {
+              issue.labels.map(label => (
+                <Label key={label.id} label={label} />
+              ))
+            }
+          </div>
           <div className='text-sm'>updated at {getLastUpdated(issue.updated_at)}</div>
         </div>
       </div >
