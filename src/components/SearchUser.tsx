@@ -38,9 +38,7 @@ export default function SearchUser({ onChange, value }) {
 
       console.log(data)
       options.length = 0
-      //setOptions([])
-      options.push(data[0])
-      options.push(data[1])
+      options.push(...(data.slice(0, 7)))
       setOptions([...options])
       console.log(options)
     })
@@ -74,7 +72,7 @@ export default function SearchUser({ onChange, value }) {
     <AsyncSelect
       className='w-[200px]'
       cacheOptions
-
+      placeholder="Search User"
       loadOptions={loadOptions}
       onChange={handleChange}
       defaultOptions

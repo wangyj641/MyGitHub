@@ -7,6 +7,13 @@ import { useState, useCallback } from 'react'
 import { getLastUpdated } from '../../lib/utils'
 import SearchUser from '@/components/SearchUser'
 import Select, { ActionMeta, OnChangeValue, StylesConfig } from 'react-select';
+import { LoaderIcon } from "lucide-react"
+
+const stateOptions = [
+  { value: 'all', label: 'All' },
+  { value: 'open', label: 'Open' },
+  { value: 'closed', label: 'Closed' }
+]
 
 const MDRender = dynamic(
   () => import('@/components/MarkdownRender'),
@@ -57,21 +64,15 @@ function IssueItem({ issue }) {
   )
 }
 
-const options = [
-  { value: 'all', label: 'All' },
-  { value: 'open', label: 'Open' },
-  { value: 'closed', label: 'Closed' }
-]
-
 function makeQuery(creator, state, labels) {
   console.log('---------------- makeQuery ----------------')
   console.log(creator)
   console.log(state)
   console.log(labels)
 
-  let creatorStr = creator ? `creator=${creator}` : '';
-  let stateStr = state ? `state=${state}` : '';
-  let labelsStr = labels ? `labels=${labels}` : '';
+  let creatorStr = creator ? `creator=${creator}` : ''
+  let stateStr = state ? `state=${state}` : ''
+  let labelsStr = labels ? `labels=${labels}` : ''
 
   const arr = [];
   if (creatorStr) arr.push(creatorStr);
@@ -89,6 +90,7 @@ function issues({ initialIssues, labels, owner, name }) {
   const [state, setState] = useState();
   const [label, setLabel] = useState('');
   const [issues, setIssues] = useState(initialIssues);
+  const [fetching, setFetching] = useState(false);
 
   const handleCreatorChange = useCallback(value => {
     console.log('---------------- handleCreatorChange ----------------')
@@ -113,12 +115,14 @@ function issues({ initialIssues, labels, owner, name }) {
     console.log(label)
   }, []);
 
-  const handleSearch = ({ ctx }) => {
+  const handleSearch = useCallback(() => {
+    console.log('---------------- handleSearch ----------------')
     const issuesUrl = `/repos/${owner}/${name}/issues`
     const query = makeQuery(creator, state, label)
-    console.log(query)
     const url = `${issuesUrl}${query}`
     console.log(url)
+
+    setFetching(true)
 
     api.request(
       {
@@ -126,23 +130,22 @@ function issues({ initialIssues, labels, owner, name }) {
       }
     ).then(resp => {
       console.log(resp)
+      setFetching(false)
       setIssues(resp.data)
     })
-  }
+  }, [owner, name, creator, state, label])
 
   return (
     <div className='flex flex-col mb-[20px] mt-[20px] border-2 border-gray-200 rounded-md'>
       <div className='flex flex-row'>
         <SearchUser
           onChange={handleCreatorChange}
-
         />
         <Select
           className='w-[200px] ml-[20px]'
           placeholder="State"
           onChange={handleStateChange}
-
-          options={options}
+          options={stateOptions}
         />
 
         <Select
@@ -150,9 +153,7 @@ function issues({ initialIssues, labels, owner, name }) {
           placeholder="Label"
           isMulti
           onChange={handleLabelChange}
-
-          options=
-          {
+          options={
             labels.map(label => {
               return {
                 value: label.name,
@@ -164,6 +165,7 @@ function issues({ initialIssues, labels, owner, name }) {
 
         <Button
           type="primary"
+          disabled={fetching}
           onClick={handleSearch}
           className="relative"
         >
@@ -171,9 +173,16 @@ function issues({ initialIssues, labels, owner, name }) {
         </Button>
       </div>
 
-      {issues.map(issue => (
-        <IssueItem issue={issue} key={issue.id} />
-      ))
+      {
+        fetching ?
+          (
+            <div className='flex flex-col w-full h-[300px] flex-grow justify-center items-center'>
+              <LoaderIcon className="animate-spin" />
+            </div>
+          ) :
+          issues.map(issue => (
+            <IssueItem issue={issue} key={issue.id} />
+          ))
       }
     </div >
   )
