@@ -63,13 +63,33 @@ const options = [
   { value: 'closed', label: 'Closed' }
 ]
 
-function issues({ issues, labels }) {
+function makeQuery(creator, state, label) {
+  console.log('---------------- makeQuery ----------------')
+  console.log(creator)
+  console.log(state)
+  console.log(label)
+  let query = ''
+  if (creator) {
+    query += `creator=${creator} `
+  }
+  if (state) {
+    query += `state=${state} `
+  }
+  if (label) {
+    query += `label=${label} `
+  }
+  return query
+}
+
+
+function issues({ initialIssues, labels, owner, name }) {
   console.log('---------------- issues ----------------')
   console.log(labels)
 
   const [creator, setCreator] = useState();
   const [state, setState] = useState();
   const [label, setLabel] = useState([]);
+  const [issues, setIssues] = useState(initialIssues);
 
   const handleCreatorChange = useCallback(value => {
     setCreator(value)
@@ -83,44 +103,62 @@ function issues({ issues, labels }) {
     setLabel(value)
   }, []);
 
-  const handleSearch = useCallback(value => {
+  const handleSearch = ({ ctx }) => {
+    const issuesUrl = `/repos/${owner}/${name}/issues`
+    const query = makeQuery(creator, state, label)
+    console.log(query)
+    const url = `${issuesUrl}?${query}`
+    console.log(url)
 
-  }, []);
+    api.request(
+      {
+        url: url
+      }
+    ).then(resp => {
+      console.log(resp)
+      setIssues(resp.data)
+    })
+
+  }
 
 
   return (
     <div className='flex flex-col mb-[20px] mt-[20px] border-2 border-gray-200 rounded-md'>
-      <SearchUser />
-      <Select
-        placeholder="State"
-        onChange={handleStateChange}
-        value={state}
-        options={options}
-      />
+      <div className='flex flex-row'>
+        <SearchUser />
+        <Select
+          className='w-[200px] ml-[20px]'
+          placeholder="State"
+          onChange={handleStateChange}
+          value={state}
+          options={options}
+        />
 
-      <Select
-        placeholder="Label"
-        isMulti
-        onChange={handleLabelChange}
-        value={label}
-        options=
-        {
-          labels.map(label => {
-            return {
-              value: label.name,
-              label: label.name
-            }
-          })
-        }
-      />
+        <Select
+          className='flex-grow ml-[20px] mr-[20px]'
+          placeholder="Label"
+          isMulti
+          onChange={handleLabelChange}
+          value={label}
+          options=
+          {
+            labels.map(label => {
+              return {
+                value: label.name,
+                label: label.name
+              }
+            })
+          }
+        />
 
-      <Button
-        type="submit"
-        onClick={handleSearch}
-        className="relative"
-      >
-        Search
-      </Button>
+        <Button
+          type="primary"
+          onClick={handleSearch}
+          className="relative"
+        >
+          Search
+        </Button>
+      </div>
 
       {issues.map(issue => (
         <IssueItem issue={issue} key={issue.id} />
@@ -137,25 +175,29 @@ issues.getInitialProps = async ({ ctx }) => {
   const issuesUrl = `/repos/${owner}/${name}/issues`
   const labelsUrl = `/repos/${owner}/${name}/labels`
   console.log(issuesUrl, labelsUrl)
-  const issuesResp = await api.request(
-    {
-      url: issuesUrl
-    },
-    ctx.req,
-    ctx.res
-  )
 
-  const labelsResp = await api.request(
-    {
-      url: labelsUrl
-    },
-    ctx.req,
-    ctx.res
-  )
+  const fetchs = await Promise.all([
+    await api.request(
+      {
+        url: issuesUrl
+      },
+      ctx.req,
+      ctx.res
+    ),
+    await api.request(
+      {
+        url: labelsUrl
+      },
+      ctx.req,
+      ctx.res
+    )
+  ])
 
   return {
-    issues: issuesResp.data,
-    labels: labelsResp.data
+    initialIssues: fetchs[0].data,
+    labels: fetchs[1].data,
+    owner: owner,
+    name: name
   }
 }
 

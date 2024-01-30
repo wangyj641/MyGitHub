@@ -68,6 +68,7 @@ export default function SearchUser() {
 
   return (
     <AsyncSelect
+      className='w-[200px]'
       cacheOptions
       loadOptions={loadOptions}
       onChange={onChange}
