@@ -63,24 +63,23 @@ const options = [
   { value: 'closed', label: 'Closed' }
 ]
 
-function makeQuery(creator, state, label) {
+function makeQuery(creator, state, labels) {
   console.log('---------------- makeQuery ----------------')
   console.log(creator)
   console.log(state)
-  console.log(label)
-  let query = ''
-  if (creator) {
-    query += `creator=${creator} `
-  }
-  if (state) {
-    query += `state=${state} `
-  }
-  if (label) {
-    query += `label=${label} `
-  }
-  return query
-}
+  console.log(labels)
 
+  let creatorStr = creator ? `creator=${creator}` : '';
+  let stateStr = state ? `state=${state}` : '';
+  let labelsStr = labels ? `labels=${labels}` : '';
+
+  const arr = [];
+  if (creatorStr) arr.push(creatorStr);
+  if (stateStr) arr.push(stateStr);
+  if (labelsStr) arr.push(labelsStr);
+
+  return `?${arr.join('&')}`
+}
 
 function issues({ initialIssues, labels, owner, name }) {
   console.log('---------------- issues ----------------')
@@ -88,26 +87,37 @@ function issues({ initialIssues, labels, owner, name }) {
 
   const [creator, setCreator] = useState();
   const [state, setState] = useState();
-  const [label, setLabel] = useState([]);
+  const [label, setLabel] = useState('');
   const [issues, setIssues] = useState(initialIssues);
 
   const handleCreatorChange = useCallback(value => {
+    console.log('---------------- handleCreatorChange ----------------')
+    //console.log(value)
     setCreator(value)
   }, []);
 
   const handleStateChange = useCallback(value => {
-    setState(value)
+    setState(value.value)
   }, []);
 
   const handleLabelChange = useCallback(value => {
-    setLabel(value)
+    console.log('---------------- handleLabelChange ----------------')
+    //console.log(value)
+    let labelStr = ''
+    value.forEach(item => {
+      labelStr += item.value + ','
+    })
+
+    //console.log(labelStr)
+    setLabel(labelStr.slice(0, -1))
+    console.log(label)
   }, []);
 
   const handleSearch = ({ ctx }) => {
     const issuesUrl = `/repos/${owner}/${name}/issues`
     const query = makeQuery(creator, state, label)
     console.log(query)
-    const url = `${issuesUrl}?${query}`
+    const url = `${issuesUrl}${query}`
     console.log(url)
 
     api.request(
@@ -118,19 +128,20 @@ function issues({ initialIssues, labels, owner, name }) {
       console.log(resp)
       setIssues(resp.data)
     })
-
   }
-
 
   return (
     <div className='flex flex-col mb-[20px] mt-[20px] border-2 border-gray-200 rounded-md'>
       <div className='flex flex-row'>
-        <SearchUser />
+        <SearchUser
+          onChange={handleCreatorChange}
+
+        />
         <Select
           className='w-[200px] ml-[20px]'
           placeholder="State"
           onChange={handleStateChange}
-          value={state}
+
           options={options}
         />
 
@@ -139,7 +150,7 @@ function issues({ initialIssues, labels, owner, name }) {
           placeholder="Label"
           isMulti
           onChange={handleLabelChange}
-          value={label}
+
           options=
           {
             labels.map(label => {

@@ -4,7 +4,10 @@ import api from '@/lib/api'
 import { useState, useCallback, useRef } from 'react'
 import debounce from 'lodash/debounce'
 
-export default function SearchUser() {
+export default function SearchUser({ onChange, value }) {
+  console.log('---------------- SearchUser ----------------')
+  console.log(value)
+
   const lastFetchIdRef = useRef(0)
   const [fetching, setFetching] = useState(false)
   const [options, setOptions] = useState([])
@@ -52,13 +55,14 @@ export default function SearchUser() {
     }, 1000);
   }
 
-  const onChange = (newValue, actionMeta) => {
-    console.log('---------------- onChange ----------------')
+  const handleChange = (newValue, actionMeta) => {
+    console.log('---------------- handleChange ----------------')
     console.log(newValue)
     console.log(actionMeta)
     switch (actionMeta.action) {
       case 'select-option':
         //Todo:
+        onChange(newValue.value)
         break
       default:
         console.log('default')
@@ -70,8 +74,9 @@ export default function SearchUser() {
     <AsyncSelect
       className='w-[200px]'
       cacheOptions
+
       loadOptions={loadOptions}
-      onChange={onChange}
+      onChange={handleChange}
       defaultOptions
     />)
 }
