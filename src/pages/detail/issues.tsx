@@ -3,11 +3,15 @@ import withRepoBasic from '@/components/with-repo-basic'
 import api from '@/lib/api'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { getLastUpdated } from '../../lib/utils'
 import SearchUser from '@/components/SearchUser'
 import Select, { ActionMeta, OnChangeValue, StylesConfig } from 'react-select';
 import { LoaderIcon } from "lucide-react"
+
+const isServer = typeof window === 'undefined'
+
+const CACHE = {}
 
 const stateOptions = [
   { value: 'all', label: 'All' },
@@ -36,15 +40,15 @@ function IssueDetail({ issue }) {
 }
 
 function Label({ label }) {
-  console.log('---------------- Label ----------------')
-  console.log(label)
+  //console.log('---------------- Label ----------------')
+  //console.log(label)
   return (
     <span className='text-sm p-[10px] ml-[15px]' style={{ background: `#${label.color}` }} > {label.name}</span >
   )
 }
 
 function IssueItem({ issue }) {
-  console.log(issue)
+  //console.log(issue)
   const [showDetail, setShowDetail] = useState(false)
 
   const toggleShowDetail = useCallback(() => {
@@ -99,7 +103,13 @@ function makeQuery(creator, state, labels) {
 
 function issues({ initialIssues, labels, owner, name }) {
   console.log('---------------- issues ----------------')
-  console.log(labels)
+  //console.log(labels)
+  if (!isServer && labels) {
+    useEffect(() => {
+      console.log('---------------- cache labels ----------------')
+      CACHE[`${owner}/${name}`] = labels
+    }, [labels, owner, name])
+  }
 
   const [creator, setCreator] = useState();
   const [state, setState] = useState();
@@ -207,8 +217,10 @@ issues.getInitialProps = async ({ ctx }) => {
   console.log('---------------- issues.getInitialProps ----------------')
   //console.log(ctx)
   const { owner, name } = ctx.query
-  const issuesUrl = `/repos/${owner}/${name}/issues`
-  const labelsUrl = `/repos/${owner}/${name}/labels`
+  const full_name = `${owner}/${name}`
+  const issuesUrl = `/repos/${full_name}/issues`
+  const labelsUrl = `/repos/${full_name}/labels`
+
   console.log(issuesUrl, labelsUrl)
 
   const fetchs = await Promise.all([
@@ -219,13 +231,16 @@ issues.getInitialProps = async ({ ctx }) => {
       ctx.req,
       ctx.res
     ),
-    await api.request(
-      {
-        url: labelsUrl
-      },
-      ctx.req,
-      ctx.res
-    )
+
+    CACHE[`${full_name}`] ?
+      Promise.resolve({ data: CACHE[`${full_name}`] }) :
+      await api.request(
+        {
+          url: labelsUrl
+        },
+        ctx.req,
+        ctx.res
+      )
   ])
 
   return {
