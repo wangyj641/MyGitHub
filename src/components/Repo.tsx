@@ -2,11 +2,11 @@ import Link from 'next/link'
 import { getLastUpdated } from '../lib/utils'
 import { Star } from 'lucide-react'
 
-function getLicense(license) {
+function getLicense(license: any) {
     return license ? `${license.spdx_id} license` : ''
 }
 
-export default function Repo({ repo }) {
+export default function Repo({ repo }: { repo: any }) {
     return (
         <div className='flex flex-row justify-between border-y-[1px] border-solid border-gray-200 pt-[20px]'>
             <div className='flex flex-col mr-[40px]'>

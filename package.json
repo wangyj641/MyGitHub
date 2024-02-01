@@ -54,5 +54,8 @@
     "tailwindcss": "3.3.3",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "5.1.6"
+  },
+  "devDependencies": {
+    "@types/markdown-it": "^13.0.7"
   }
 }

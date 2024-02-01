@@ -7,11 +7,11 @@ const md = new MarkdownIt({
     linkify: true
 })
 
-function b64_to_utf8(str) {
+function b64_to_utf8(str: string) {
     return decodeURIComponent(escape(atob(str)))
 }
 
-export default memo(function MarkdownRender({ content, isBase64 }) {
+export default memo(function MarkdownRender({ content, isBase64 }: { content: any, isBase64: boolean }) {
     const markdown = isBase64 ? b64_to_utf8(content) : content
     const html = useMemo(() => md.render(markdown), [markdown])
 
