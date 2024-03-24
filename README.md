@@ -1,24 +1,41 @@
 # MyGitHub
 
-This is a personal github Webapp.
+A personal github web app.
 
-Developed with next.js, react, tailwindCss koa, Redis.
+Developed with next.js, react, TailwindCss koa, Redis.
 
 ![screenshot](public/screenshot.jpg)
 
 ### Key Features:
 
-- Login your github account
-- View all your repositories
-- Search repositories
 - TailwindCSS UI design
 - Github authentication integration
+- Login your github account
+- View your repositories list
+- View a repository detail
+- Search repositories
 
-## Getting Started
 
-### Register a github OAuth app
+### Getting Started
 
-### Start the app
+##### Config
+- Register a OAuth app
+```
+github -> settings -> Developer settings -> OAuth apps
+```
+- Edit global.config.js
+```
+// Github OAuth app client id
+const client_id = '246560ac02e68a37f12b';
+// Github OAuth app Client Secret
+const client_secret = 'a41f9423c793d224b3d268efb1d26e28e9faa281';
+
+const SCOPE = 'user';
+
+const GITHUB_OAUTH_URL = 'https://github.com/login/oauth/authorize';
+```
+
+##### Start the app
 
 ```shell
 npm run dev

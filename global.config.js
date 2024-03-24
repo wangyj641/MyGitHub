@@ -1,13 +1,11 @@
-const GITHUB_OAUTH_URL = 'https://github.com/login/oauth/authorize';
+// Github OAuth app client id
+const client_id = '246560ac02e68a37f12b';
+// Github OAuth app Client Secret
+const client_secret = 'a41f9423c793d224b3d268efb1d26e28e9faa281';
 
-// 希望得到的授权
 const SCOPE = 'user';
 
-// https://github.com/settings/developers
-// 在 github 上注册的 App 的 Client ID
-const client_id = '246560ac02e68a37f12b';
-// 在 github 上注册的 App 的 Client Secret
-const client_secret = 'a41f9423c793d224b3d268efb1d26e28e9faa281';
+const GITHUB_OAUTH_URL = 'https://github.com/login/oauth/authorize';
 
 module.exports = {
   github: {
