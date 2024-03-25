@@ -1,25 +1,27 @@
 # MyGitHub
 
-A personal github web app.
+- A personal GitHub web app that supports logging in to GitHub, browsing repositories, searching repositories, and viewing repository details.
 
-Developed with next.js, react, TailwindCss koa, Redis.
+- Developed with Next.js, React, Koa2, TailwindCSS, Redis.
 
 ![screenshot](public/screenshot.jpg)
 
-### Key Features:
+### Key Features
 
+- A Next.js server-side rending fullstack project 
+- Koa2 server provides data interfaces and server-side route
 - TailwindCSS UI design
-- Github authentication integration
-- Login your github account
-- View your repositories list
-- View a repository detail
-- Search repositories
+- Github OAuth integration
+- Apply React Hooks
+- Integrate redux into Next.js
+- Redis session store
+- Use Github REST APIs
 
 
 ### Getting Started
 
-##### Config
-- Register a OAuth app
+##### Configuration
+- Register a github OAuth app
 ```
 github -> settings -> Developer settings -> OAuth apps
 ```
