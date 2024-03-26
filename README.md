@@ -2,18 +2,18 @@
 
 - A personal GitHub web app that supports logging in to GitHub, browsing repositories, searching repositories, and viewing repository details.
 
-- Developed with Next.js, React, Koa2, TailwindCSS, Redis.
+- Developed with JavaScript, Next.js, React, Koa2, TailwindCSS, Redis, OAuth, radix-ui
 
 ![screenshot](public/screenshot.jpg)
 
-### Key Features
+### Key Skills
 
-- A Next.js server-side rending fullstack project 
+- Next.js server-side rending fullstack project 
 - Koa2 server provides data interfaces and server-side route
 - TailwindCSS UI design
 - Github OAuth integration
 - Apply React Hooks
-- Integrate redux into Next.js
+- Integrate Redux into Next.js
 - Redis session store
 - Use Github REST APIs
 
@@ -44,4 +44,3 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
