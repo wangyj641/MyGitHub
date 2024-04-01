@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import axios from 'axios'
 
 const userInitialState = {}
@@ -15,9 +15,9 @@ function userReducer(state = userInitialState, action) {
   }
 }
 
-const reducers = {
+const rootReducer = combineReducers({
   user: userReducer,
-}
+});
 
 // call server api to perform logout
 // dispatch action to store to remove sessions
@@ -52,12 +52,10 @@ const preloadedState = {
   ],
 }
 
-export default function initializeStore(state) {
+export default function initializeStore(state: any) {
   console.log('-------------- store initializeStore -------------')
-  //console.log(state)
-
   const store = configureStore({
-    reducer: reducers,
+    reducer: rootReducer,
     preloadedState: Object.assign(
       {},
       {

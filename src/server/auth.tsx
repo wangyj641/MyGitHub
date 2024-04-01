@@ -6,7 +6,7 @@ const { client_id, client_secret, request_token_url } = config.github
 module.exports = (server) => {
   server.use(async (ctx, next) => {
     if (ctx.path === '/auth') {
-      console.log('------ auth ------')
+      //console.log('------ auth ------')
       const code = ctx.query.code
       if (!code) {
         ctx.body = {

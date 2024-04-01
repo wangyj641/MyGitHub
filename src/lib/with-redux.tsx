@@ -4,11 +4,9 @@ import initializeStore from '../store/store'
 const isServer = typeof window === 'undefined'
 const __NEXT_REDUX_STORE__ = '__NEXT_REDUX_STORE__'
 
-function getOrCreateStore(initialState) {
-  // if (!initialState)
-  //   console.log('----------------- initialState is null -----------------')
+function getOrCreateStore(initialState: any) {
   if (isServer) {
-    console.log('-------------- isServer -------------')
+    //console.log('-------------- isServer -------------')
     return initializeStore(initialState)
   }
 
@@ -53,7 +51,7 @@ export default (AppComp) => {
           user: session.userInfo
         })
       } else {
-        console.log('-------------------- fail to get session -------------------')
+        //console.log('-------------------- fail to get session -------------------')
         reduxStore = getOrCreateStore()
       }
     }
